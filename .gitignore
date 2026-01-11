@@ -13,6 +13,12 @@ services/playground
 services/ner
 services/text_extraction/
 services/ranking/ranker.py
-services/utility_funcs/logainm_scraper.py
-services/utility_funcs/mapping.py
-services/utility_funcs/surname_xml_gazetter.py
+utility_funcs/logainm_scraper.py
+utility_funcs/mapping.py
+utility_funcs/surname_xml_gazetter.py
+.env
+services/normalize/surnames.xml
+services/normalize/mod_words.py
+services/normalize/logainm_data.json
+services/normalize/irish_surnames_index.json
+services/normalize/irish_surnames_clusters.json

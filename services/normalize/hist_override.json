@@ -1,0 +1,91 @@
+{
+  "accompt":"account",
+  "payd": "paid",
+  "paide": "paid",
+  "payde": "paid",
+  "paydeth": "paid",
+
+  "sayd": "said",
+  "sayed": "said",
+  "sayde": "said",
+
+  "yr": "your",
+  "yne": "one",
+
+  "moneth": "month",
+  "moneths": "months",
+  "maiesties":"majesties",
+  "lojall" : "loyal",
+
+  "beeinge": "being",
+  "beeing": "being",
+  "beinge": "being",
+
+  "vniuersitie": "university",
+  "vniuersity": "university",
+  "vniversitie": "university",
+
+  "receypt": "receipt",
+  "receipte": "receipt",
+  "recceypt": "receipt",
+
+  "ffycche": "office",
+  "fycche": "office",
+  "fycchehouse": "officehouse",
+
+  "doe": "do",
+  "doeth": "does",
+  "doth": "does",
+
+  "hath": "has",
+  "hathh": "has",
+
+  "gaue": "gave",
+  "giue": "give",
+  "giuen": "given",
+  "giueth": "gives",
+  "giuing": "giving",
+
+  "haue": "have",
+  "hauing": "having",
+  "haueing": "having",
+
+  "bee": "be",
+  "beene": "been",
+  "bene": "been",
+
+  "wereof": "whereof",
+
+  "againe": "again",
+  "againest": "against",
+  "agayne": "again",
+
+  "neere": "near",
+  "neare": "near",
+
+  "faileth": "fails",
+  "faile": "fail",
+
+  "wyll": "will",
+  "wylling": "willing",
+  "vvill": "will",
+
+  "shoulde": "should",
+  "woulde": "would",
+  "coulde": "could",
+
+  "oldde": "old",
+  "olde": "old",
+
+  "heere": "here",
+  "thereofe": "thereof",
+  "hereofe": "hereof",
+
+  "shal": "shall",
+  "shalle": "shall",
+
+  "yeres":"years",
+
+  "widdow": "widow",
+  "summe": "sum"
+}

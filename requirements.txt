@@ -1,0 +1,25 @@
+# --- API Core ---
+fastapi
+uvicorn
+pydantic
+requests
+
+# --- NLP & ML ---
+transformers==4.57.1
+datasets
+evaluate
+accelerate
+torch
+sentencepiece
+spacy
+flair
+stanza
+
+# --- Optional: spaCy models (download manually once)
+# python -m spacy download en_core_web_sm
+# python -m spacy download en_core_web_trf
+
+# --- Utility ---
+tqdm
+numpy
+pandas
