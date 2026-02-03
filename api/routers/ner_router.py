@@ -8,7 +8,7 @@ router = APIRouter(prefix="/ner", tags=["Named Entity Recognition"])
 engines = {
     # "spacy": SpacyNER(),
     # "flair": FlairNER(),
-    "bert": BertNER(),
+    # "bert": BertNER(),
     # "stanza": StanzaNER()
 }
 

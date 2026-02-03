@@ -25,11 +25,11 @@ def run_pipeline(request: PipelineRequest):
     # normalized_text, char_map = normalize(input_text)
     # print("Norm done")
     normalized_text = normalize_v2(input_text)
-    print("Norm done")
+    # print("Norm done")
     # print(normalized_text)
 
     # 2. NER (BERT, filter PER + LOC)
-    ner_engine = BertNER()
+    # ner_engine = BertNER()
     ner_raw = ner_engine.analyze(normalized_text)
 
     filtered_mentions = [ent for ent in ner_raw if ent["label"] in ("PER", "LOC")]
@@ -47,7 +47,7 @@ def run_pipeline(request: PipelineRequest):
         linked_output.append(
             {"mention": ent["text"], "label": ent["label"], "ranked_candidates": ranked}
         )
-    print("linked_output done")
+    # print("linked_output done")
     # print(linked_output)
     # 4. FINAL OUTPUT
     return {

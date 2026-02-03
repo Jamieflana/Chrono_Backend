@@ -70,7 +70,6 @@ class HistoricalNormalizerV2:
         """
         with open(irish_names_path, "r", encoding="utf-8") as f:
             data = json.load(f)
-
         self.irish_prefixes: Set[str] = {p.lower() for p in data.get("prefixes", [])}
         self.irish_surnames: Set[str] = {s.lower() for s in data.get("surnames", [])}
         self.irish_first_names: Set[str] = {
@@ -104,13 +103,17 @@ class HistoricalNormalizerV2:
     @staticmethod
     def _clean_for_match(tok: str) -> str:
         # normalize curly apostrophe to straight for matching
-        tok = tok.replace("’", "'")
+        tok = tok.replace("'", "'")
         return re.sub(rf"[^{HistoricalNormalizerV2._LETTER_CLASS}'-]", "", tok).lower()
 
     def _is_irish_token(self, tok: str, pending_prefix: bool) -> Tuple[bool, bool]:
         clean = self._clean_for_match(tok)
         if not clean:
             return False, False
+
+        is_prefix = clean in self.irish_prefixes
+        if is_prefix:
+            return True, False
 
         if clean in self.irish_surnames or clean in self.irish_first_names:
             return True, False
@@ -137,15 +140,25 @@ class HistoricalNormalizerV2:
 
     @staticmethod
     def _pre_normalize_text(text: str) -> str:
+        """
+        Docstring for _pre_normalize_text
+
+        :param text: Description
+        :type text: str
+        :return: Description
+        :rtype: str
+        """
         # Unicode normalization
         text = unicodedata.normalize("NFKC", text)
 
         # Normalize smart quotes/apostrophes
         text = text.replace("“", '"').replace("”", '"')
-        text = text.replace("‘", "'").replace("’", "'")
+        text = text.replace("'", "'").replace("`", "'")
 
         # Normalize dashes
-        text = text.replace("—", "--").replace("–", "-")
+        text = text.replace("—", "--").replace("-", "-")
+
+        # text = re.sub(r"^I\s+(?=[A-Z][a-z]+\s+[A-Z])", "I, ", text, flags=re.MULTILINE)
 
         return text
 
@@ -335,16 +348,30 @@ class HistoricalNormalizerV2:
     def normalize(self, text: str) -> NormalizedDocument:
         visual = text
         text = self._pre_normalize_text(text)
-
         normalized_chars = []
         char_map: Dict[int, int] = {}
 
         pending_prefix = False
         a_i = 0
+        line_start = True
 
         for m in self._TOKEN_RE.finditer(text):
             tok = m.group(0)
             start = m.start()
+
+            if line_start and tok == "I":
+                # Add "I"
+                normalized_chars.append("I")
+                char_map[a_i] = start
+                a_i += 1
+
+                # Add comma (mapped to same position as "I")
+                normalized_chars.append(",")
+                char_map[a_i] = start
+                a_i += 1
+
+                line_start = False
+                continue
 
             if self._WORD_RE.fullmatch(tok):
                 is_irish, pending_prefix = self._is_irish_token(tok, pending_prefix)
@@ -414,7 +441,7 @@ def normalize_v2(
             use_wordfreq=True,
             wordfreq_min_zipf=2.5,
             max_candidates=24,
-            force_overrides=False,  # safer default
+            force_overrides=True,  # safer default
             override_bonus=0.25,
         )
 

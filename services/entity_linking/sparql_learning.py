@@ -1,10 +1,15 @@
+import time
 from typing import List
+
 from services.entity_linking.sparql_querys import VRTIQuery
 from services.sparql_client import VirtualTreasurySPARQL
+
 
 # /home/jamie/Documents/FinalYear/Dissertation/Chrono/Backend/services/sparql_client.py
 KG_BASE = "https://kg.virtualtreasury.ie/"
 ENTITY_CARD_BASE = "https://vrti-graph.adaptcentre.ie/entity-card/"
+
+EARLY_MODERN_ERA = "Early-Modern-1500-1749"
 
 raw_data = [
     {
@@ -121,7 +126,7 @@ raw_data = [
     },
 ]
 
-henry_data = [
+jane_data = [
     {
         "text": "Jane Armstrong",
         "label": "PER",
@@ -133,7 +138,7 @@ henry_data = [
 
 Donegal_Data = [
     {
-        "text": "Donegal",
+        "text": "Cork",
         "label": "LOC",
         "score": 0.9997882843017578,
         "start": 51,
@@ -141,47 +146,69 @@ Donegal_Data = [
     }
 ]
 
+Ulster_data = [
+    {
+        "text": "Ulster",
+        "label": "LOC",
+        "score": 0.9997882843017578,
+        "start": 51,
+        "end": 58,
+    },
+    {
+        "text": "Donegal",
+        "label": "LOC",
+        "score": 0.9997882843017578,
+        "start": 51,
+        "end": 58,
+    },
+]
 
-def enrich_with_entity_cards(sparql_json: dict) -> list[dict]:
+Oneil_data = [
+    {
+        "text": "Neale O Neale",
+        "label": "PER",
+        "score": 0.9999756217002869,
+        "start": 93,
+        "end": 104,
+    },
+]
+
+LOCATION_HIERARCHY_GRAPH = {}
+
+
+def enrich_with_entity_cards(sparql_json: dict, era: str) -> list[dict]:
     rows = sparql_json.get("results", {}).get("bindings", [])
     enriched = []
     for row in rows:
-        person_iri = row["person"]["value"]
-        label = row.get("label", {}).get("value")
-        idNodes = row.get("idNodes").get("value")
-        idLabels = row.get("idLabels").get("value")
-        labels = split_by_pipe(idLabels)
-        identifierCount = row.get("identifierCount").get("value")
-        genders_raw = row.get("genders").get("value", "")  # extract at the end of the #
-        genders = extract_by_hash(genders_raw)
-        eras_raw = row.get("eras").get("value")  # extract at the end of the #
-        eras = extract_by_hash(eras_raw)
-        residences = row.get("residences").get("value")
-        raw_residences_labels = row.get("residenceLabels").get("value")
-        residencesLabels = split_by_pipe(raw_residences_labels)
-        documentSources = row.get("documentSources").get("value")
-        events = row.get("events").get("value")
-        event_appearences = row.get("eventCount").get("value")
-        if not label:
-            # fallback: derive from person IRI
-            person_iri = row["person"]["value"]
-            label = person_iri.rstrip("/").split("/")[-2]  # e.g. "Jones_Henry_c17"
+        person_uri = row["person"]["value"]
+        label = row.get("personLabel", {}).get("value")
 
+        # Extract residences (used in get_residence_score)
+        residences = row.get("residences", {}).get("value", "")
+        raw_residences_labels = row.get("residenceLabels", {}).get("value", "")
+        residencesLabels = (
+            split_by_pipe(raw_residences_labels) if raw_residences_labels else []
+        )
+
+        # Extract floruit dates (used in get_floruit_score)
+        floruitEarliest = row.get("floruitEarliest", {}).get("value", "")
+        floruitLatest = row.get("floruitLatest", {}).get("value", "")
+
+        # Fallback for label if not present
+        if not label:
+            label = person_uri.rstrip("/").split("/")[-2]
+
+        vrti_card = to_entity_card_url(person_uri)
         enriched.append(
             {
-                "person": person_iri,
+                "person": person_uri,
                 "label": label,
-                "entityCard": to_entity_card_url(person_iri),
-                "idNodes": idNodes,
-                "idLabels": labels,
-                "identifierCount": identifierCount,
-                "genders": genders,
-                "eras": eras,
+                "entity_card": vrti_card,
+                "eras": era,
                 "residences": residences,
                 "residencesLabels": residencesLabels,
-                "documentSources": documentSources,
-                "events": events,
-                "eventCount": event_appearences,
+                "floruitEarliest": floruitEarliest,
+                "floruitLatest": floruitLatest,
             }
         )
 
@@ -193,7 +220,6 @@ def split_by_pipe(entity_row: str):
     labels = entity_row.split("|")
     for label in labels:
         label = label.strip()
-        # print("Label is:", label)
         if "," in label:
             # label = label.replace(",", "")
             surname, forename = label.split(",", 1)
@@ -216,19 +242,136 @@ def extract_by_hash(entity_row: str) -> List[str]:
 
 
 def extract_uri_metadata(uri: str):
+    if "kg.virtualtreasury.ie" not in uri:
+        return "External Link"
     segments = uri.split("/")
-    era = segments[4]
-    return era
+    if len(segments) > 4:
+        return segments[4]
+    return "Not Known"
+
+
+def construct_location_graph_edge(parent_data: str, current_uri: str):
+    """
+    Docstring for construct_location_graph_edge
+
+    :param parent_data: String of Direct parent
+    :type parent_data: str
+    :param current_uri: Current URI making graph edges for
+    :type current_uri: str
+    """
+    parent_uris = []
+
+    if not parent_data:
+        # No parents, it is top level?
+        if current_uri not in LOCATION_HIERARCHY_GRAPH:
+            LOCATION_HIERARCHY_GRAPH[current_uri] = {
+                "parents": [],
+                "children": [],
+            }
+        return []
+
+    # Now split the parents by |
+    for uri in parent_data.split("|"):
+        uri = uri.strip()
+        if not uri:
+            continue
+
+        parent_uris.append(uri)
+
+        if uri not in LOCATION_HIERARCHY_GRAPH:
+            LOCATION_HIERARCHY_GRAPH[uri] = {"parents": [], "children": []}
+
+        # BI directional edge
+        if current_uri not in LOCATION_HIERARCHY_GRAPH[uri]["children"]:
+            LOCATION_HIERARCHY_GRAPH[uri]["children"].append(current_uri)
+
+    if current_uri not in LOCATION_HIERARCHY_GRAPH:
+        LOCATION_HIERARCHY_GRAPH[current_uri] = {
+            "parents": parent_uris,
+            "children": [],
+        }
+    else:
+        LOCATION_HIERARCHY_GRAPH[current_uri]["parents"] = parent_uris
+    return parent_uris
+
+
+def ancestor_format(ancestor_data: str):
+    ancestors = []
+    if not ancestor_data:
+        return []
+
+    for uri in ancestor_data.split("|"):
+        uri = uri.strip()
+        if not uri:
+            continue
+        segments = uri.split("/")
+        if len(segments) >= 7:
+            place_name = segments[-2]
+            place_type = segments[-3]
+
+            ancestors.append({"uri": uri, "type": place_type, "label": place_name})
+        else:
+            ancestors.append(
+                {
+                    "uri": uri,
+                    "type": "unknown",
+                    "label": uri.split("/")[-1] if "/" in uri else uri,
+                }
+            )
+    return ancestors
+
+
+def parent_place_2(place_data: str, current_uri: str):
+    places = []
+    uri_list = []
+    if not place_data:
+        # Add to graph
+        LOCATION_HIERARCHY_GRAPH[current_uri] = {
+            "parents": [],
+            "children": LOCATION_HIERARCHY_GRAPH.get(current_uri, {}).get(
+                "children", []
+            ),
+        }
+        return []
+
+    for uri in place_data.split("|"):
+        uri = uri.strip()
+        segments = uri.split("/")
+        place_name = segments[-2]
+        place_type = segments[-3]
+        # print(place_name, place_type)
+
+        places.append({"uri": uri, "type": place_type, "label": place_name})
+        uri_list.append(uri)
+
+        # Now add to the graph?
+        if uri not in LOCATION_HIERARCHY_GRAPH:
+            LOCATION_HIERARCHY_GRAPH[uri] = {"parents": [], "children": []}
+        if current_uri not in LOCATION_HIERARCHY_GRAPH[uri]["children"]:
+            LOCATION_HIERARCHY_GRAPH[uri]["children"].append(current_uri)
+    if current_uri not in LOCATION_HIERARCHY_GRAPH:
+        LOCATION_HIERARCHY_GRAPH[current_uri] = {
+            "parents": uri_list,
+            "children": [],
+        }
+    else:
+        LOCATION_HIERARCHY_GRAPH[current_uri]["parents"] = uri_list
+    return places
 
 
 def parent_place_extract(place_data: str):
     place_list = []
-    if place_data == "":
-        return
+    place_uris = []
+    if not place_data:
+        return []
     # 1. Split by pipe:
     for uri in place_data.split("|"):
-        second_last = uri.split("/")
-        place_list.append({second_last[-2]: uri})
+        uri = uri.strip()
+        segments = uri.split("/")
+        place_name = segments[-2]
+        place_type = segments[-3]
+
+        place_list.append({f"{place_type} - {place_name}": uri})
     return place_list
 
 
@@ -236,24 +379,51 @@ def extract_info(data):
     rows = data.get("results", {}).get("bindings", [])
     candidates = []
     for row in rows:
+        # print(row)
         irishLabel = ""
+
         place = row.get("place").get("value")
+        if not place:
+            continue
+
         era = extract_uri_metadata(place)
-        englishLabel = row.get("labelEn").get("value")
-        isIrishLabel = row.get("labelGa", "No Irish")
-        if isIrishLabel != "No Irish":
-            irishLabel = isIrishLabel.get("value")
-        placeType = row.get("types", "No Type link").get("value")
-        types = extract_by_hash(placeType)
-        parentPlace = row.get("parentPlaces").get("value")  # extract here
-        places = parent_place_extract(parentPlace)
+
+        englishLabel = row.get("labelEn", {}).get("value")
+        irishLabel = row.get("labelGa", {}).get("value")
+
+        placeType = row.get("types", {}).get("value")
+        types = extract_by_hash(placeType) if placeType else []
+
+        parentPlaces = row.get("parentPlaces", {}).get("value")
+        ancestorPlaces = row.get("ancestorPlaces", {}).get("value")  # extract here
+
+        # Now build the edges
+        construct_location_graph_edge(parentPlaces, place)
+        hierarchy = ancestor_format(ancestorPlaces)
+
+        # places = parent_place_2(placeHierarchy, place)
+        # places = parent_place_extract(placeHierarchy)
+        # Put place in the graph
+        if place in LOCATION_HIERARCHY_GRAPH:
+            LOCATION_HIERARCHY_GRAPH[place].update(
+                {
+                    "english": englishLabel,
+                    "irish": irishLabel,
+                    "era": era,
+                    "types": types,
+                    "all_ancestors": hierarchy,
+                }
+            )
+
         entity_dict = {
             "place": place,
             "era": era,
             "english": englishLabel,
             "irish": irishLabel,
             "types": types,
-            "parentPlace": places,
+            "parentPlace": parentPlaces,
+            "ancestorHierarchy": hierarchy,
+            "all_ancestors": [a["uri"] for a in hierarchy],
         }
         candidates.append(entity_dict)
     return candidates
@@ -302,28 +472,46 @@ def deduplicate_places(results: list) -> list:
     return unique
 
 
-def query_person(entity_name: str):
-    # q = VRTIQuery.person_query(entity_name)
-    q_2 = VRTIQuery.person_query_2(entity_name)
-    # q_1 = VRTIQuery.person_query(entity_name)
-    resp_2 = VirtualTreasurySPARQL.query(q_2)
-    # resp_1 = VirtualTreasurySPARQL.query(q_1)
-    # print(resp_2)
-    result = enrich_with_entity_cards(resp_2)
-    # print(result)
+def query_person(entity_name: str, era: str):
+    if len(entity_name) < 4:
+        return []
 
-    # return replies
+    q_2 = VRTIQuery.bif_contains(entity_name, era)
+    resp_2 = VirtualTreasurySPARQL.query(q_2)
+    results = resp_2["results"].get("bindings")
+    person_uris = [row["person"]["value"] for row in results]
+    if not person_uris:
+        return []
+    q = VRTIQuery.expand_person_knowledge(person_uris)
+    resp_3 = VirtualTreasurySPARQL.query(q)
+
+    result = enrich_with_entity_cards(resp_3, era)
+
     return result
 
 
-def query_location(entity_name: str):
-    # q = VRTIQuery.place_query(entity_name) OLD
-    q = VRTIQuery.place_query_rich(entity_name)  # New
+def query_location(entity_name: str, era: str):
+    if entity_name and len(entity_name) < 4:
+        q = VRTIQuery.location_query_no_wildcard(entity_name, era)
+    else:
+        q = VRTIQuery.fixed_place_bif(entity_name, era)  # Leave the era in for now
+    # print(q)
     resp = VirtualTreasurySPARQL.query(q)
-    # unique_resp = deduplicate_places(resp)
-
     enriched_resp = extract_info(resp)
     return enriched_resp
+
+
+def create_batches(entities):
+    person_batch = []
+    location_batch = []
+    for entity in entities:
+        if entity["label"] == "PER":
+            person_batch.append(entity)
+        elif entity["label"] == "LOC":
+            location_batch.append(entity)
+        else:
+            print("Not person or location")  # change this to a logger
+    return person_batch, location_batch
 
 
 def query_sparql(entities):
@@ -332,25 +520,16 @@ def query_sparql(entities):
         # 1. Extract the actual entity
         entity_name = entity.get("text")
         entity_label = entity.get("label")
-        entity_score = entity.get("score")
-        entity_start = entity.get("start")
-        entity_end = entity.get("end")
-
+        found_entities = []
         if entity_label == "PER":
-
-            found_entities = query_person(entity_name)
+            found_entities = query_person(entity_name, EARLY_MODERN_ERA)
         elif entity_label == "LOC":
-            found_entities = query_location(entity_name)
-        if found_entities:
-            entity_block = {
-                "entity_meta_data": entity,
-                "candidate_entities": found_entities,
-            }
-            ents.append(entity_block)
-    print(ents)
-    return ents
-
-
-# print("Starting")
-query_sparql(raw_data)
-# query_sparql(Donegal_Data)
+            found_entities = query_location(entity_name, EARLY_MODERN_ERA)
+        # if found_entities:
+        entity_block = {
+            "entity_meta_data": entity,
+            "candidate_entities": found_entities,
+        }
+        ents.append(entity_block)
+        # print(ents)
+    return ents, LOCATION_HIERARCHY_GRAPH
