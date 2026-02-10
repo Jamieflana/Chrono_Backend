@@ -195,6 +195,10 @@ class HistoricalNormalizerV2:
         if "vv" in lower:
             cands.append(lower.replace("vv", "w"))
 
+        # w -> u
+        if "w" in lower:
+            cands.append(lower.replace("w", "u"))
+
         # initial ff -> f
         if lower.startswith("ff") and len(lower) > 2:
             cands.append("f" + lower[2:])
@@ -246,6 +250,10 @@ class HistoricalNormalizerV2:
         # collapse repeated vowel at end: bee -> be, hee -> he
         if re.search(r"(aa|ee|ii|oo|uu)$", lower):
             cands.append(re.sub(r"(aa|ee|ii|oo|uu)$", lambda m: m.group(0)[0], lower))
+
+        # Common historical variant: "shanon" -> "shannon" (e.g., ballyshanon).
+        if "shanon" in lower:
+            cands.append(lower.replace("shanon", "shannon"))
 
         # Filter + dedupe + cap
         cands = [c for c in cands if c and self._only_letters_apostrophes(c)]
@@ -302,7 +310,6 @@ class HistoricalNormalizerV2:
             return self.historical_override[lower]
 
         cands = self._gen_candidates(lower)
-
         # Frequency scoring
         freq_scores: Dict[str, float] = {}
         for c in cands:
@@ -355,25 +362,80 @@ class HistoricalNormalizerV2:
         a_i = 0
         line_start = True
 
-        for m in self._TOKEN_RE.finditer(text):
+        tokens = list(self._TOKEN_RE.finditer(text))
+        i = 0
+        while i < len(tokens):
+            m = tokens[i]
             tok = m.group(0)
             start = m.start()
 
             if line_start and tok == "I":
-                # Add "I"
                 normalized_chars.append("I")
                 char_map[a_i] = start
                 a_i += 1
 
-                # Add comma (mapped to same position as "I")
                 normalized_chars.append(",")
                 char_map[a_i] = start
                 a_i += 1
 
                 line_start = False
+                i += 1
                 continue
 
             if self._WORD_RE.fullmatch(tok):
+                # ---- O + IrishSurname -> O'IrishSurname join rule ----
+                if tok.lower() in {"o", "ó"}:
+                    j = i + 1
+                    # Skip whitespace and punctuation tokens
+                    while j < len(tokens):
+                        t = tokens[j].group(0)
+                        if self._WORD_RE.fullmatch(t):
+                            break
+                        if t.isspace() or (len(t) == 1 and not t.isalnum()):
+                            j += 1
+                            continue
+                        break
+
+                    if j < len(tokens) and self._WORD_RE.fullmatch(tokens[j].group(0)):
+                        next_m = tokens[j]
+                        next_tok = next_m.group(0)
+                        next_start = next_m.start()
+
+                        # Normalize the next token first (so Neale -> Neill happens)
+                        next_is_irish, _ = self._is_irish_token(next_tok, False)
+                        if next_is_irish:
+                            next_out = next_tok
+                        else:
+                            next_out = self._preserve_case(
+                                self._choose_candidate(next_tok), next_tok
+                            )
+
+                        clean_next_out = self._clean_for_match(next_out)
+                        if clean_next_out in self.irish_surnames:
+                            joined = tok + "'" + next_out
+
+                            # Emit joined token; map O' to O's start and surname to its own start
+                            for k_idx, ch in enumerate(joined):
+                                normalized_chars.append(ch)
+                                if k_idx <= 1:  # "O'"
+                                    orig_pos = start
+                                else:
+                                    k = int(
+                                        (k_idx - 2)
+                                        * (max(len(next_tok) - 1, 0))
+                                        / max(len(next_tok) - 1, 1)
+                                    )
+                                    orig_pos = next_start + min(k, len(next_tok) - 1)
+
+                                char_map[a_i] = orig_pos
+                                a_i += 1
+
+                            pending_prefix = False
+                            line_start = False
+                            i = j + 1
+                            continue
+                # ---- end join rule ----
+
                 is_irish, pending_prefix = self._is_irish_token(tok, pending_prefix)
 
                 if is_irish:
@@ -381,6 +443,11 @@ class HistoricalNormalizerV2:
                 else:
                     chosen_lower = self._choose_candidate(tok)
                     out = self._preserve_case(chosen_lower, tok)
+
+                # capitalize known place names for BERT
+                clean_out = self._clean_for_match(out)
+                if clean_out in self.irish_places:
+                    out = out.capitalize()
 
                 for j, ch in enumerate(out):
                     normalized_chars.append(ch)
@@ -414,6 +481,9 @@ class HistoricalNormalizerV2:
                     char_map[a_i] = start + j
                     a_i += 1
                 pending_prefix = False
+
+            line_start = False
+            i += 1
 
         return NormalizedDocument(
             visual_layer=visual,

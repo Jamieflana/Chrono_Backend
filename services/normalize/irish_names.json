@@ -158,13 +158,15 @@
     "limrick": "limerick",
     "armaghe": "armagh",
     "tirone": "tyrone",
-    "ffermanagh": "fermanagh",
+    "ffermannagh": "fermanagh",
     "meath": "meath",
     "flaunders": "flanders",
     "dublinne": "dublin",
     "cashell": "cashel",
     "cittie": "city",
-    "dunnigall": "donegal"
+    "dunnigall": "donegal",
+    "ardmagh": "armagh",
+    "engeland": "england"
   },
   "all_counties": [
     "antrim",

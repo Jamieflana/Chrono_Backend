@@ -3,22 +3,23 @@ from enum import Enum
 from typing import Optional
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException, Query, UploadFile, File
+from fastapi import APIRouter, Form, HTTPException, Query, UploadFile, File
 from pydantic import BaseModel
 from services.entity_linking.sparql_learning import query_sparql
-from services.ner.filter_entities import filter_ner_entities
+from services.filter_entities import filter_ner_entities
 from services.ner_engines import BertNER, FlairNER, SpacyNER, StanzaNER
 from services.new_normalize import normalize_v2
+from services.ner_post_processing import merge_adjacent_spans
 from services.ranking.candidate_ranker import CandidateRanker
 from services.text_extraction.parser import extract_and_format
 
 router = APIRouter(prefix="/pipeline", tags=["Part NLP Pipeline"])
 
 NER_ENGINES = {
-    "spacy": SpacyNER(),
+    # "spacy": SpacyNER(),
     # "flair": FlairNER(),
     "bert": BertNER(),
-    "stanza": StanzaNER(),
+    # "stanza": StanzaNER(),
 }
 
 
@@ -40,7 +41,15 @@ def process_ner(visual_text: str, ner_engine: str):
     normalized_text, char_map = normalize_v2(visual_text)
     engine = NER_ENGINES.get(ner_engine)
     ner_raw = engine.fast_analyse(normalized_text)
-    filter_entities, spans_lookup = filter_ner_entities(ner_raw)
+    ner_prepped = merge_adjacent_spans(
+        ner_raw,
+        text=normalized_text,
+        labels=("PER", "LOC"),
+        max_gap=6,
+        merge_min_score=0.55,
+        extend_irish_o_surname=True,
+    )
+    filter_entities, spans_lookup = filter_ner_entities(ner_prepped)
     query_resp, loc_graph = query_sparql(filter_entities)
     data_block = {
         "visual": visual_text,
@@ -62,17 +71,20 @@ def process_ner(visual_text: str, ner_engine: str):
 
 @router.post("/upload/text")
 async def run_debug(
-    request: DebugRequest,
+    text: str = Form(...),
     ner_engine: str = Query("bert", enum=list(NER_ENGINES.keys())),
 ):
 
-    visual_text = request.text
+    visual_text = text
 
     normalized_text, char_map = normalize_v2(visual_text)
     engine = NER_ENGINES.get(ner_engine)
     ner_raw = engine.fast_analyse(normalized_text)
-    filter_entities, spans_lookup = filter_ner_entities(ner_raw)
-    print(spans_lookup)
+    merged = clean_bert_entities_from_normalized_text(
+        ner_raw, normalized_text, max_gap=6
+    )
+    filter_entities, spans_lookup = filter_ner_entities(merged)
+    # print(filter_entities)
     query_resp, loc_graph = query_sparql(filter_entities)
     data_block = {
         "visual": visual_text,
@@ -80,7 +92,6 @@ async def run_debug(
         "ents": query_resp,
         "spans_lookup": spans_lookup,
     }
-
     cr = CandidateRanker(data_block, loc_graph)
     ranked_ents = cr.rank()
     return {
@@ -127,22 +138,6 @@ async def run_file(
     return process_ner(visual_text, ner_engine)
 
 
-"""
-@router.post("/upload/file")
-async def run_file(
-    file: UploadFile = File(...),  # REQUIRED file
-    ner_engine: str = Query("bert", enum=list(NER_ENGINES.keys())),
-):
-    # Just print the filename and return it
-    print(f"Uploaded file: {file.filename}")
-
-    return {
-        "filename": file.filename,
-        "message": f"File '{file.filename}' uploaded successfully",
-    }
-"""
-
-
 @router.post("/ner_only")
 def run_ner_only(
     request: DebugRequest,
@@ -160,39 +155,6 @@ def run_ner_only(
         "norm": normalized_text,
         "ner": results,
         "engine": ner_engine,
-    }
-
-
-@router.post("fine-tune")
-def fine_tune_debug(
-    request: DebugRequest,
-    ner_engine: str = Query("bert", enum=list(NER_ENGINES.keys()) + ["all"]),
-):
-    text = request.text
-    normalized_text, char_map = normalize_v2(text)
-    engine = NER_ENGINES.get(ner_engine)
-    ner_results = engine.analyze(normalized_text)
-    entities = [(ent["start"], ent["end"], ent["label"]) for ent in ner_results]
-    training_format = {"text": normalized_text, "entities": entities}
-    entity_preview = [
-        {
-            "span": normalized_text[ent[0] : ent[1]],
-            "start": ent[0],
-            "end": ent[1],
-            "label": ent[2],
-            "score": next(
-                (e["score"] for e in ner_results if e["start"] == ent[0]), None
-            ),
-        }
-        for ent in entities
-    ]
-
-    return {
-        "training_format": training_format,  # Ready to save as-is
-        "preview": entity_preview,  # For human review
-        "visual_text": text,  # Original for reference
-        "normalized_text": normalized_text,  # What BERT sees
-        "total_entities": len(entities),
     }
 
 
@@ -216,3 +178,42 @@ def remember_duplicates(entities):
     }
 
     return unique_entities, spans_lookup
+
+
+def clean_bert_entities_from_normalized_text(
+    entities: list, normalized_text: str, max_gap: int = 3
+) -> list:
+    """
+    Typical BERT NER post-processing:
+    1) Rebuild entity text from canonical normalized text offsets
+    2) Merge adjacent same-label spans split by tokenization
+    """
+    nt_len = len(normalized_text)
+    aligned = []
+
+    for ent in entities:
+        start = max(0, int(ent.get("start", 0)))
+        end = min(nt_len, int(ent.get("end", 0)))
+        if end <= start:
+            continue
+
+        rebuilt = normalized_text[start:end].strip()
+        if not rebuilt:
+            continue
+
+        fixed = dict(ent)
+        fixed["start"] = start
+        fixed["end"] = end
+        fixed["text"] = rebuilt
+        aligned.append(fixed)
+
+    merged = merge_adjacent_spans(
+        aligned,
+        text=normalized_text,
+        labels=("PER", "LOC"),
+        max_gap=max_gap,
+        merge_min_score=0.55,
+        extend_irish_o_surname=True,
+        debug=True,
+    )
+    return merged

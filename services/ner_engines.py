@@ -541,6 +541,7 @@ class BertNER(BaseNER):
             r"city\s+of|citty\s+of|"
             r"town\s+of|towne\s+of|"
             r"kingdom\s+of|kingdome\s+of|"
+            r"proportion\s+of|"
             r"of"
             r")\s+",
             re.IGNORECASE,

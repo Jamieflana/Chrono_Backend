@@ -1,5 +1,6 @@
 import re
-from typing import Set
+from typing import Optional, Set
+import unicodedata
 
 
 class VRTIQuery:
@@ -115,6 +116,29 @@ class VRTIQuery:
         }}
         LIMIT 100
         """
+        return query
+
+    @staticmethod
+    def place_present_day_by_label(entity_name: str) -> str:
+        safe_name = entity_name.lower().replace('"', '\\"')
+        query = (
+            query
+        ) = f"""
+        PREFIX crm:  <http://erlangen-crm.org/current/>
+        PREFIX geo:  <http://www.opengis.net/ont/geosparql#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT DISTINCT
+            ?place
+            ?placeType
+            ?name
+        FROM <https://kg.virtualtreasury.ie/graph/present-day-places-v1>
+        WHERE {{
+            ?place a crm:E53_Place ;
+                  crm:P2_has_type ?placeType ;
+                  rdfs:label ?name .
+            FILTER (langMatches(lang(?name), "en") && contains(lcase(str(?name)), "{safe_name}"))
+        }}
+        LIMIT 10"""
         return query
 
     @staticmethod
@@ -627,17 +651,18 @@ class VRTIQuery:
         """
         return query
 
-    def fixed_place_bif(entity_name: str, era: str) -> str:
+    def fixed_place_bif(entity_name: str, era: Optional[str] = None) -> str:
         """
         Build SPARQL query for place entity linking using bif:contains on appellations.
 
         Args:
             entity_name: The place name to search for (e.g., "Donegal", "Dublin")
-            era: The era identifier (e.g., "Early-Modern-1500-1749")
+            era: Optional era identifier (e.g., "Early-Modern-1500-1749")
 
         Returns:
             SPARQL query string
         """
+        era_clause = f"?place vrti:VRTI_ERA thes:{era} ." if era else ""
         query = f"""
           PREFIX cidoc: <http://erlangen-crm.org/current/>
           PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -653,7 +678,7 @@ class VRTIQuery:
             (SAMPLE(?ancestorPlaces) AS ?ancestorPlaces)
           WHERE {{
             ?place rdf:type cidoc:E53_Place .
-            ?place vrti:VRTI_ERA thes:{era} .
+            {era_clause}
             ?place cidoc:P1_is_identified_by ?appellation .
             ?appellation rdfs:label ?appellationName .
             ?appellationName bif:contains "'{entity_name}*'" .
@@ -678,7 +703,8 @@ class VRTIQuery:
       """
         return query
 
-    def location_query_no_wildcard(entity_name: str, era: str):
+    def location_query_no_wildcard(entity_name: str, era: Optional[str] = None):
+        era_clause = f"?place vrti:VRTI_ERA thes:{era} ." if era else ""
         query = f"""
           PREFIX cidoc: <http://erlangen-crm.org/current/>
           PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -694,7 +720,7 @@ class VRTIQuery:
             (SAMPLE(?ancestorPlaces) AS ?ancestorPlaces)
           WHERE {{
             ?place rdf:type cidoc:E53_Place .
-            ?place vrti:VRTI_ERA thes:{era} .
+            {era_clause}
             ?place cidoc:P1_is_identified_by ?appellation .
             ?appellation rdfs:label ?appellationName .
             ?appellationName bif:contains "'{entity_name}'" .
@@ -724,19 +750,37 @@ class VRTIQuery:
         parts = entity_name.strip().split()
         surname = parts[-1]
         escaped_name = escape_bif_contains(surname)
-        query = f"""
-        PREFIX vrti: <https://www.w3id.org/virtual-treasury/ontology#>
-        PREFIX voc: <https://www.w3id.org/virtual-treasury/vocabulary#>
+        query = ""
+        print(surname)
+        if len(surname) < 4:
+            query = f"""
+          PREFIX vrti: <https://www.w3id.org/virtual-treasury/ontology#>
+          PREFIX voc: <https://www.w3id.org/virtual-treasury/vocabulary#>
 
-        SELECT DISTINCT ?person
-        WHERE {{
-          ?person a <http://erlangen-crm.org/current/E21_Person> .
-          ?person vrti:VRTI_ERA|vrti:has_era_type voc:{era} .
-          ?person <http://erlangen-crm.org/current/P1_is_identified_by> ?appellation .
-          ?appellation <http://www.w3.org/2000/01/rdf-schema#label> ?name .
-          ?name bif:contains "'{escaped_name}*'" .
-        }}
-        """
+          SELECT DISTINCT ?person
+          WHERE {{
+            ?person a <http://erlangen-crm.org/current/E21_Person> .
+            ?person vrti:VRTI_ERA|vrti:has_era_type voc:{era} .
+            ?person <http://erlangen-crm.org/current/P1_is_identified_by> ?appellation .
+            ?appellation <http://www.w3.org/2000/01/rdf-schema#label> ?name .
+            ?name bif:contains "'{escaped_name}'" .
+          }}
+          """
+        else:
+            query = f"""
+          PREFIX vrti: <https://www.w3id.org/virtual-treasury/ontology#>
+          PREFIX voc: <https://www.w3id.org/virtual-treasury/vocabulary#>
+
+          SELECT DISTINCT ?person
+          WHERE {{
+            ?person a <http://erlangen-crm.org/current/E21_Person> .
+            ?person vrti:VRTI_ERA|vrti:has_era_type voc:{era} .
+            ?person <http://erlangen-crm.org/current/P1_is_identified_by> ?appellation .
+            ?appellation <http://www.w3.org/2000/01/rdf-schema#label> ?name .
+            ?name bif:contains "'{escaped_name}*'" .
+          }}
+          LIMIT 30
+          """
         return query
 
     def expand_person_knowledge(uri_list: list):
@@ -746,58 +790,171 @@ class VRTIQuery:
         values_clause = "\n".join(f"<{uri}>" for uri in uri_list)
 
         query = f"""
-      PREFIX cidoc: <http://erlangen-crm.org/current/>
-      PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX cidoc: <http://erlangen-crm.org/current/>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-      SELECT 
-          ?person 
-          (SAMPLE(?personLabel) AS ?personLabel)
-          ?residences
-          ?residenceLabels
-          (MIN(?floruitBegin) AS ?floruitEarliest)
-          (MAX(?floruitEnd) AS ?floruitLatest)
+  SELECT
+      ?person
+      (SAMPLE(?personLabel) AS ?personLabel)
+      ?dibResource
+      ?residences
+      ?residenceLabels
+      (MIN(?floruitBegin) AS ?floruitEarliest)
+      (MAX(?floruitEnd) AS ?floruitLatest)
+  WHERE {{
+    VALUES ?person {{
+      {values_clause}
+    }}
+
+    OPTIONAL {{ ?person rdfs:label ?personLabel }}
+
+    OPTIONAL {{
+      SELECT ?person (SAMPLE(STR(?dib)) AS ?dibResource)
       WHERE {{
         VALUES ?person {{
           {values_clause}
         }}
-        
-        OPTIONAL {{ ?person rdfs:label ?personLabel }}
-        
-        OPTIONAL {{
-          SELECT ?person
-            (GROUP_CONCAT(DISTINCT STR(?residence); SEPARATOR=" | ") AS ?residences)
-            (GROUP_CONCAT(DISTINCT ?residenceLabel; SEPARATOR=" | ") AS ?residenceLabels)
-          WHERE {{
-            ?person cidoc:P74_has_current_or_former_residence ?residence .
-            FILTER(
-              CONTAINS(STR(?residence), "kg.virtualtreasury.ie/place/") ||
-              CONTAINS(STR(?residence), "/county/") ||
-              CONTAINS(STR(?residence), "/townland/") ||
-              CONTAINS(STR(?residence), "/parish/")
-            )
-            OPTIONAL {{ ?residence rdfs:label ?residenceLabel }}
-          }}
-          GROUP BY ?person
-        }}
-        
-        OPTIONAL {{
-          {{
-            ?floruitEvent cidoc:P11_had_participant ?person .
-            FILTER(CONTAINS(STR(?floruitEvent), "/floruit/"))
-          }}
-          UNION
-          {{
-            ?floruitEvent cidoc:P12_occurred_in_the_presence_of ?person .
-            FILTER(CONTAINS(STR(?floruitEvent), "/floruit/"))
-          }}
-          
-          ?floruitEvent cidoc:P4_has_time-span ?timeSpan .
-          OPTIONAL {{ ?timeSpan cidoc:P82a_begin_of_the_begin ?floruitBegin }}
-          OPTIONAL {{ ?timeSpan cidoc:P82b_end_of_the_end ?floruitEnd }}
-        }}
+        ?person cidoc:P71i_is_listed_in ?dib .
       }}
-      GROUP BY ?person ?residences ?residenceLabels
-      """
+      GROUP BY ?person
+    }}
+
+
+    OPTIONAL {{
+      SELECT ?person
+        (GROUP_CONCAT(DISTINCT STR(?residence); SEPARATOR=" | ") AS ?residences)
+        (GROUP_CONCAT(DISTINCT ?residenceLabel; SEPARATOR=" | ") AS ?residenceLabels)
+      WHERE {{
+        ?person cidoc:P74_has_current_or_former_residence ?residence .
+        FILTER(
+          CONTAINS(STR(?residence), "kg.virtualtreasury.ie/place/") ||
+          CONTAINS(STR(?residence), "/county/") ||
+          CONTAINS(STR(?residence), "/townland/") ||
+          CONTAINS(STR(?residence), "/parish/")
+        )
+        OPTIONAL {{ ?residence rdfs:label ?residenceLabel }}
+      }}
+      GROUP BY ?person
+    }}
+
+    OPTIONAL {{
+      {{
+        ?floruitEvent cidoc:P11_had_participant ?person .
+        FILTER(CONTAINS(STR(?floruitEvent), "/floruit/"))
+      }}
+      UNION
+      {{
+        ?floruitEvent cidoc:P12_occurred_in_the_presence_of ?person .
+        FILTER(CONTAINS(STR(?floruitEvent), "/floruit/"))
+      }}
+
+      ?floruitEvent cidoc:P4_has_time-span ?timeSpan .
+      OPTIONAL {{ ?timeSpan cidoc:P82a_begin_of_the_begin ?floruitBegin }}
+      OPTIONAL {{ ?timeSpan cidoc:P82b_end_of_the_end ?floruitEnd }}
+    }}
+  }}
+  GROUP BY ?person ?dibResource ?residences ?residenceLabels
+  """
+        return query
+
+    def final_person(entity_name: str, era: str):
+        parts = [
+            unicodedata.normalize("NFC", p.strip())
+            for p in entity_name.split()
+            if p.strip()
+        ]
+
+        # Virtuoso bif:contains expects apostrophe escaping as doubled single quotes, not backslash
+        safe_parts = [p.replace("'", "''") for p in parts]
+
+        if len(safe_parts) >= 2:
+            bif_q = " AND ".join(f"'{p}'" for p in safe_parts)
+        elif len(safe_parts) == 1:
+            bif_q = f"'{safe_parts[0]}'"
+        else:
+            bif_q = "''"
+
+        query = f"""
+  PREFIX crm:  <http://erlangen-crm.org/current/>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX vrti: <https://www.w3id.org/virtual-treasury/ontology#>
+  PREFIX voc:  <https://www.w3id.org/virtual-treasury/vocabulary#>
+
+  SELECT DISTINCT ?person ?name
+  WHERE {{
+    ?person a crm:E21_Person ;
+            vrti:VRTI_ERA|vrti:has_era_type voc:{era} ;
+            crm:P1_is_identified_by ?appellation .
+    ?appellation rdfs:label ?name .
+    ?name bif:contains "{bif_q}"
+  }}
+  LIMIT 10
+  """
+        return query
+
+    def expand_location_knowledge(uri_list: list):
+        if not uri_list:
+            return None
+
+        values_clause = "\n".join(f"<{uri}>" for uri in uri_list)
+
+        query = f"""
+  PREFIX cidoc: <http://erlangen-crm.org/current/>
+  PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+  PREFIX vrti: <https://ont.virtualtreasury.ie/ontology#>
+  PREFIX ogcgs: <http://www.opengis.net/ont/geosparql#>
+  PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+  SELECT
+      ?place
+      (SAMPLE(?logainmUri) AS ?logainmUri)
+      (SAMPLE(?labelEn) AS ?labelEn)
+      (SAMPLE(?labelGa) AS ?labelGa)
+      (GROUP_CONCAT(DISTINCT STR(?type); SEPARATOR=" | ") AS ?types)
+      ?parentPlaces
+      ?parentLabels
+      (GROUP_CONCAT(DISTINCT STR(?sameAs); SEPARATOR=" | ") AS ?sameAsLinks)
+      (GROUP_CONCAT(DISTINCT STR(?listedIn); SEPARATOR=" | ") AS ?externalResources)
+      (SAMPLE(?vrtiId) AS ?vrtiIdentifier)
+      (GROUP_CONCAT(DISTINCT STR(?approximatedBy); SEPARATOR=" | ") AS ?historicalApproximations)
+  WHERE {{
+    VALUES ?place {{
+      {values_clause}
+    }}
+
+    OPTIONAL {{ ?place rdfs:label ?labelEn FILTER(lang(?labelEn) = "en") }}
+    OPTIONAL {{ ?place rdfs:label ?labelGa FILTER(lang(?labelGa) = "ga") }}
+    OPTIONAL {{ ?place cidoc:P2_has_type ?type }}
+    OPTIONAL {{ ?place owl:sameAs ?sameAs }}
+    OPTIONAL {{ ?place cidoc:P71i_is_listed_in ?listedIn }}
+    OPTIONAL {{ ?place vrti:VrtiIdentifier ?vrtiId }}
+
+    OPTIONAL {{
+      ?place owl:sameAs ?logainmUri .
+      FILTER(CONTAINS(STR(?logainmUri), "data.logainm.ie"))
+    }}
+
+    OPTIONAL {{
+      ?approximatedBy cidoc:P189_approximates ?place .
+    }}
+
+    OPTIONAL {{
+      SELECT ?place
+        (GROUP_CONCAT(DISTINCT STR(?parent); SEPARATOR=" | ") AS ?parentPlaces)
+        (GROUP_CONCAT(DISTINCT ?parentLabel; SEPARATOR=" | ") AS ?parentLabels)
+      WHERE {{
+        VALUES ?place {{
+          {values_clause}
+        }}
+        ?place cidoc:P89_falls_within ?parent .
+        OPTIONAL {{ ?parent rdfs:label ?parentLabel FILTER(lang(?parentLabel) = "en") }}
+      }}
+      GROUP BY ?place
+    }}
+  }}
+  GROUP BY ?place ?parentPlaces ?parentLabels
+  """
         return query
 
 
