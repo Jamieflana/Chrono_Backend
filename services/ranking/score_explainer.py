@@ -47,9 +47,22 @@ class ScoreExplainer:
         """Generate explanation for person entity scores."""
         explanations = []
         explanations.append(f"{entity_name} scores {score:.3f}")
+        feature_scores = candidate.get("_feature_scores", {})
+
+        # NAME EXPLANATION
+        name_score = feature_scores.get("name")
+        if name_score is not None:
+            if name_score >= 0.85:
+                explanations.append("their name closely matches the mention")
+            elif name_score >= 0.6:
+                explanations.append("their name partially matches the mention")
+            else:
+                explanations.append("their name has a weak match to the mention")
 
         # ERA EXPLANATION
-        era_score = self.ranker.get_era_score(candidate, "PER")
+        era_score = feature_scores.get("era")
+        if era_score is None:
+            era_score = self.ranker.get_era_score(candidate, "PER")
         candidate_era = candidate.get("eras", "unknown")
 
         if era_score == 1.0:
@@ -66,7 +79,9 @@ class ScoreExplainer:
             explanations.append("their era information is incomplete")
 
         # RESIDENCE EXPLANATION
-        residence_score = self.ranker.get_residence_score(candidate)
+        residence_score = feature_scores.get("residence")
+        if residence_score is None:
+            residence_score = self.ranker.get_residence_score(candidate)
         residence_labels = candidate.get("residencesLabels", [])
 
         if residence_score == 1.0 and residence_labels:
@@ -109,7 +124,9 @@ class ScoreExplainer:
             )
 
         # FLORUIT EXPLANATION
-        floruit_score = self.ranker.get_floruit_score(candidate)
+        floruit_score = feature_scores.get("floruit")
+        if floruit_score is None:
+            floruit_score = self.ranker.get_floruit_score(candidate)
         start = candidate.get("floruitEarliest", "")
         end = candidate.get("floruitLatest", "")
 
@@ -148,32 +165,25 @@ class ScoreExplainer:
         """Generate explanation for location entity scores."""
         explanations = []
         explanations.append(f"{entity_name} scores {score:.3f}")
+        feature_scores = candidate.get("_feature_scores", {})
 
-        # ERA EXPLANATION
-        era_score = self.ranker.get_era_score(candidate, "LOC")
-        candidate_era = candidate.get("era", "unknown")
-
-        if era_score == 1.0:
-            explanations.append(
-                f"its era ({candidate_era}) matches the document era "
-                f"({self.document_era})"
-            )
-        elif era_score == 0.4:
-            explanations.append(
-                f"it is a present-day location while the document is from "
-                f"{self.document_era}"
-            )
-        elif era_score == 0:
-            explanations.append(
-                f"its era ({candidate_era}) does not match the document era "
-                f"({self.document_era})"
-            )
-        else:
-            explanations.append("its era information is incomplete")
+        # NAME EXPLANATION
+        name_score = feature_scores.get("name")
+        if name_score is not None:
+            if name_score >= 0.95:
+                explanations.append("its name is an exact match to the mention")
+            elif name_score >= 0.75:
+                explanations.append("its name is a close match to the mention")
+            elif name_score >= 0.5:
+                explanations.append("its name partially matches the mention")
+            else:
+                explanations.append("its name is a weak match to the mention")
 
         # TYPE MATCH EXPLANATION
         mention = candidate.get("english", entity_name)
-        type_score = self.ranker.get_type_score(candidate, mention, "LOC")
+        type_score = feature_scores.get("type_match")
+        if type_score is None:
+            type_score = self.ranker.get_type_score(candidate, mention, "LOC")
         candidate_types = candidate.get("types", [])
         context = self.ranker.get_entity_context(mention, window=50).lower()
 
@@ -218,43 +228,60 @@ class ScoreExplainer:
                 "no specific location type is mentioned in the nearby context"
             )
 
-        # GEOGRAPHIC EXPLANATION
-        geo_score = self.ranker.get_geographic_score(candidate, mention)
+        # HIERARCHY EXPLANATION
+        hierarchy_score = feature_scores.get("hierarchy")
+        if hierarchy_score is None:
+            hierarchy_score = self.ranker.get_hierarchy_score(candidate, mention)
 
-        if geo_score == 1.0:
+        if hierarchy_score == 1.0:
             explanations.append("it is directly mentioned elsewhere in the document")
 
-        elif geo_score == 0.75:
-            ancestor_hierarchy = candidate.get("ancestorHierarchy", [])
-            all_ancestors = candidate.get("all_ancestors", [])
-            matched_ancestor = None
+        elif hierarchy_score >= 0.75:
+            parent_labels = candidate.get("parentLabels", []) or []
+            child_labels = candidate.get("childLabels", []) or []
+            matched_parent = None
+            matched_children = []
 
-            for ancestor in ancestor_hierarchy:
-                ancestor_label = (ancestor.get("label") or "").lower()
-                if ancestor_label in self.possible_locations:
-                    matched_ancestor = ancestor.get("label")
+            for parent_label in parent_labels:
+                if (parent_label or "").lower() in self.possible_locations:
+                    matched_parent = parent_label
                     break
 
-            if not matched_ancestor:
-                for ancestor_uri in all_ancestors:
-                    node = self.location_graph.get(ancestor_uri)
-                    if node:
-                        ancestor_label = (node.get("english") or "").lower()
-                        if ancestor_label in self.possible_locations:
-                            matched_ancestor = node.get("english")
-                            break
+            for child_label in child_labels:
+                if (child_label or "").lower() in self.possible_locations:
+                    matched_children.append(child_label)
 
-            if matched_ancestor:
+            if matched_parent:
                 explanations.append(
-                    f"it has a geographic connection to {matched_ancestor}, "
-                    f"which is mentioned in the document"
+                    f"its parent place ({matched_parent}) is mentioned in the document"
+                )
+            if matched_children:
+                shown_children = ", ".join(matched_children[:3])
+                explanations.append(
+                    f"its child places include {shown_children}, which are mentioned in the document"
+                )
+            if not matched_parent and not matched_children:
+                explanations.append(
+                    "it has geographic overlap with other locations mentioned in the document"
                 )
 
-        elif geo_score == 0:
+        elif hierarchy_score == 0:
             explanations.append(
                 "it has no geographic overlap with other locations mentioned "
                 "in the document"
             )
+
+        # HISTORICAL EXPLANATION
+        historical_score = feature_scores.get("historical")
+        if historical_score is not None:
+            if historical_score == 1.0:
+                explanations.append(
+                    "it has an early-modern historical approximation in VRTI"
+                )
+            elif historical_score >= 0.7:
+                explanations.append("it has historical approximation links in VRTI")
+            else:
+                explanations.append("it has no historical approximation link")
 
         return self._format_explanation(explanations)
 
