@@ -129,21 +129,21 @@ raw_data = [
 
 jane_data = [
     {
-        "text": "Webb",
+        "text": "Jane Armstrong",
         "label": "PER",
-        "score": 0.9999756217002869,
-        "start": 93,
-        "end": 104,
-    },
-    {
-        "text": "Neill O Neill",
-        "label": "PER",
-        "score": 0.9737834334373474,
-        "start": 396,
-        "end": 409,
+        "score": 0.9999857544898987,
+        "start": 151,
+        "end": 163,
     },
     {
         "text": "George Carew",
+        "label": "PER",
+        "score": 0.9999857544898987,
+        "start": 151,
+        "end": 163,
+    },
+    {
+        "text": "Henry Jones",
         "label": "PER",
         "score": 0.9999857544898987,
         "start": 151,
@@ -163,13 +163,6 @@ oge = [
 
 Donegal_Data = [
     {
-        "text": "Jane Armstrong",
-        "label": "PER",
-        "score": 0.9999756217002869,
-        "start": 93,
-        "end": 104,
-    },
-    {
         "text": "Donegal",
         "label": "LOC",
         "score": 0.9997882843017578,
@@ -178,6 +171,13 @@ Donegal_Data = [
     },
     {
         "text": "Londonderry",
+        "label": "LOC",
+        "score": 0.9997882843017578,
+        "start": 51,
+        "end": 58,
+    },
+    {
+        "text": "Ulster",
         "label": "LOC",
         "score": 0.9997882843017578,
         "start": 51,
@@ -235,45 +235,85 @@ _TRUNCATED_O_SURNAME_RE = re.compile(r"^[Oo]['’][A-Za-z]{1,3}$")
 
 def enrich_with_entity_cards(sparql_json: dict, era: str) -> list[dict]:
     rows = sparql_json.get("results", {}).get("bindings", [])
-    enriched = []
+    enriched_by_uri: dict[str, dict] = {}
     for row in rows:
         person_uri = row["person"]["value"]
-        label = row.get("personLabel", {}).get("value")
+        label = row.get("fullName", {}).get("value")
+        if label and "," in label:
+            surname, forename = label.split(",", 1)
+            label = f"{forename.strip()} {surname.strip()}"
 
-        # Extract residences (used in get_residence_score)
+        # Extract residences (used in get_residence_score).
         residences = row.get("residences", {}).get("value", "")
         raw_residences_labels = row.get("residenceLabels", {}).get("value", "")
-        residencesLabels = (
-            split_by_pipe(raw_residences_labels) if raw_residences_labels else []
-        )
+        if raw_residences_labels:
+            residencesLabels = split_by_pipe(raw_residences_labels)
+        elif residences:
+            residencesLabels = []
+            for residence_uri in residences.split("|"):
+                residence_uri = residence_uri.strip()
+                if not residence_uri:
+                    continue
+                parts = residence_uri.rstrip("/").split("/")
+                # VRTI place URI shape is typically .../<placeName>/<id>.
+                if len(parts) >= 2:
+                    derived = parts[-2].replace("_", " ")
+                    if derived and derived not in residencesLabels:
+                        residencesLabels.append(derived)
+        else:
+            residencesLabels = []
 
         # Extract floruit dates (used in get_floruit_score)
-        floruitEarliest = row.get("floruitEarliest", {}).get("value", "")
-        floruitLatest = row.get("floruitLatest", {}).get("value", "")
+        floruitEarliest = row.get("floruitLower", {}).get("value", "")
+        floruitLatest = row.get("floruitUpper", {}).get("value", "")
 
         # dib - external link
-        dib_reference = row.get("dibResource", {}).get("value", "")
+        dib_reference = row.get("dib", {}).get("value", "")
 
         # Fallback for label if not present
         if not label:
             label = person_uri.rstrip("/").split("/")[-2]
 
         vrti_card = to_entity_card_url(person_uri)
-        enriched.append(
-            {
-                "person": person_uri,
-                "label": label,
-                "entity_card": vrti_card,
-                "eras": era,
-                "residences": residences,
-                "residencesLabels": residencesLabels,
-                "floruitEarliest": floruitEarliest,
-                "floruitLatest": floruitLatest,
-                "external_dib": dib_reference,
-            }
-        )
+        candidate = {
+            "person": person_uri,
+            "label": label,
+            "entity_card": vrti_card,
+            "eras": era,
+            "residences": residences,
+            "residencesLabels": residencesLabels,
+            "floruitEarliest": floruitEarliest,
+            "floruitLatest": floruitLatest,
+            "external_dib": dib_reference,
+        }
 
-    return enriched
+        existing = enriched_by_uri.get(person_uri)
+        if not existing:
+            enriched_by_uri[person_uri] = candidate
+            continue
+
+        # Merge duplicates by URI, preferring non-empty values.
+        for field in (
+            "label",
+            "entity_card",
+            "eras",
+            "floruitEarliest",
+            "floruitLatest",
+            "external_dib",
+        ):
+            if not existing.get(field) and candidate.get(field):
+                existing[field] = candidate[field]
+
+        if not existing.get("residences") and candidate.get("residences"):
+            existing["residences"] = candidate["residences"]
+
+        merged_labels = list(existing.get("residencesLabels", []))
+        for lbl in candidate.get("residencesLabels", []):
+            if lbl and lbl not in merged_labels:
+                merged_labels.append(lbl)
+        existing["residencesLabels"] = merged_labels
+
+    return list(enriched_by_uri.values())
 
 
 def split_by_pipe(entity_row: str):
@@ -711,6 +751,24 @@ def qp(entity_name: str, era: str):
     return result
 
 
+def query_person_entity(entity_name: str, era):
+    if not entity_name:
+        return []
+    q1 = VRTIQuery.person_query_profile_early_modern(entity_name)
+    res = VirtualTreasurySPARQL.query(q1)
+    result = enrich_with_entity_cards(res, era)
+    return result
+
+
+def query_location_entity(entity_name: str, era: str):
+    if not entity_name:
+        return []
+    q1 = VRTIQuery.final_place_query(entity_name)
+    res = VirtualTreasurySPARQL.query(q1)
+    enriched_resp = extract_info(res)
+    return enriched_resp
+
+
 def query_location(entity_name: str, era: str):
     if entity_name and len(entity_name) < 4:
         q = VRTIQuery.location_query_no_wildcard(entity_name, era)
@@ -770,12 +828,13 @@ def query_sparql(entities):
         entity_label = entity.get("label")
         found_entities = []
         if entity_label == "PER":
-            # found_entities = query_person(entity_name, EARLY_MODERN_ERA)
-            # print(entity_name)
-            found_entities = qp(entity_name, EARLY_MODERN_ERA)
+            found_entities = query_person_entity(
+                entity_name, EARLY_MODERN_ERA
+            )  # Final sorted
         elif entity_label == "LOC":
             # found_entities = query_location(entity_name, EARLY_MODERN_ERA)
-            found_entities = ql(entity_name, EARLY_MODERN_ERA)
+            # found_entities = ql(entity_name, EARLY_MODERN_ERA)
+            found_entities = query_location_entity(entity_name, EARLY_MODERN_ERA)
         # if found_entities:
         entity_block = {
             "entity_meta_data": entity,
@@ -784,7 +843,3 @@ def query_sparql(entities):
         ents.append(entity_block)
         # print(ents)
     return ents, LOCATION_HIERARCHY_GRAPH
-
-
-# x, y = query_sparql(jane_data)
-# print(x)
