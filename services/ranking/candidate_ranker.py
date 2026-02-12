@@ -66,6 +66,8 @@ class SemanticRanker:
 
         if len(candidates) <= min_candidates:
             return candidates
+        if self.model is None:
+            return candidates
 
         # Semantics
         texts = [mention.lower()] + [c.lower() for c in candidates]
@@ -108,7 +110,21 @@ class SemanticRanker:
         return filtered_candidates
 
 
-SEMANTIC_RANKER = SemanticRanker(model=SentenceTransformer("all-MiniLM-L6-v2"))
+def _load_semantic_model():
+    """
+    Prefer local model loading so backend still starts in offline environments.
+    Falls back to None (neutral neural scoring) when model isn't available.
+    """
+    try:
+        return SentenceTransformer("all-MiniLM-L6-v2", local_files_only=True)
+    except Exception:
+        try:
+            return SentenceTransformer("all-MiniLM-L6-v2")
+        except Exception:
+            return None
+
+
+SEMANTIC_RANKER = SemanticRanker(model=_load_semantic_model())
 
 
 class CandidateRanker:
@@ -121,6 +137,7 @@ class CandidateRanker:
         use_semantic_filter: bool = False,
         semantic_threshold: float = 70.0,
         semantic_top_k: int = 8,
+        use_neural_rerank: bool = True,
     ):
         self.data = data
         self.entities = data["ents"]
@@ -129,6 +146,9 @@ class CandidateRanker:
         self.location_graph = loc_graph
         self.document_year = 1641  # document_year
         self.document_era = "early-modern-1500-1749"
+        self.use_neural_rerank = use_neural_rerank
+        self.semantic_model = SEMANTIC_RANKER.model
+        self._embedding_cache = {}
         if use_semantic_filter:
             self._apply_semantic_filtering(
                 SEMANTIC_RANKER, semantic_threshold, semantic_top_k
@@ -225,14 +245,16 @@ class CandidateRanker:
             "era": self.get_era_score(candidate, label),
             "residence": self.get_residence_score(candidate),
             "floruit": self.get_floruit_score(candidate),
+            "neural": self.get_neural_score(mention, candidate, label),
         }
         candidate["_feature_scores"] = person_features
 
         weights = {
-            "name": 0.40,
-            "era": 0.25,
-            "residence": 0.20,
-            "floruit": 0.15,
+            "name": 0.32,
+            "era": 0.20,
+            "residence": 0.18,
+            "floruit": 0.12,
+            "neural": 0.18,
         }
 
         weighted_sum = sum(person_features[f] * weights[f] for f in person_features)
@@ -244,20 +266,90 @@ class CandidateRanker:
             "hierarchy": self.get_hierarchy_score(candidate, mention),
             "type_match": self.get_type_score(candidate, mention, label),
             "historical": self.get_historical_score(candidate),
+            "neural": self.get_neural_score(mention, candidate, label),
         }
         candidate["_feature_scores"] = location_features
 
         weights = {
-            "name": 0.30,
-            "hierarchy": 0.30,
-            "type_match": 0.20,
-            "historical": 0.20,
+            "name": 0.25,
+            "hierarchy": 0.25,
+            "type_match": 0.18,
+            "historical": 0.12,
+            "neural": 0.20,
         }
         weighted_total = sum(
             location_features[feature] * weights[feature]
             for feature in location_features
         )
         return weighted_total
+
+    def _get_embedding(self, text):
+        key = (text or "").strip()
+        if not key:
+            return None
+        emb = self._embedding_cache.get(key)
+        if emb is not None:
+            return emb
+        if self.semantic_model is None:
+            return None
+        emb = self.semantic_model.encode(key, show_progress_bar=False)
+        self._embedding_cache[key] = emb
+        return emb
+
+    def _build_candidate_profile_text(self, candidate, label):
+        if label == "PER":
+            parts = [
+                candidate.get("label") or "",
+                candidate.get("eras") or "",
+                candidate.get("floruitEarliest") or "",
+                candidate.get("floruitLatest") or "",
+            ]
+            residences = candidate.get("residencesLabels") or []
+            if residences:
+                parts.append(" ".join(str(x) for x in residences if x))
+            return " | ".join(str(p) for p in parts if p)
+
+        if label == "LOC":
+            parts = [
+                candidate.get("english") or "",
+                candidate.get("irish") or "",
+                candidate.get("era") or "",
+            ]
+            types = candidate.get("types") or []
+            if types:
+                parts.append(" ".join(str(x) for x in types if x))
+            parent_labels = candidate.get("parentLabels") or []
+            if parent_labels:
+                parts.append(" ".join(str(x) for x in parent_labels if x))
+            historical = candidate.get("historicalApproximations") or []
+            if historical:
+                parts.append(" ".join(str(x) for x in historical if x))
+            return " | ".join(str(p) for p in parts if p)
+
+        return ""
+
+    def get_neural_score(self, mention, candidate, label):
+        if not self.use_neural_rerank:
+            return 0.5
+
+        mention_text = (mention or "").strip()
+        if not mention_text:
+            return 0.5
+
+        context = self.get_entity_context(mention, window=120)
+        query_text = mention_text if not context else f"{mention_text}. context: {context}"
+        candidate_text = self._build_candidate_profile_text(candidate, label)
+        if not candidate_text:
+            return 0.5
+
+        query_emb = self._get_embedding(query_text)
+        cand_emb = self._get_embedding(candidate_text)
+        if query_emb is None or cand_emb is None:
+            return 0.5
+
+        cosine = float(cosine_similarity([query_emb], [cand_emb])[0][0])
+        normalized = (cosine + 1.0) / 2.0
+        return float(np.clip(normalized, 0.0, 1.0))
 
     def get_location_name_score(self, mention, candidate):
         mention_norm = self._normalize_place_text(mention)

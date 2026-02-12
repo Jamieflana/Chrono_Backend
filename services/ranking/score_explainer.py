@@ -157,6 +157,21 @@ class ScoreExplainer:
                 "floruit comparison is not possible without a document year"
             )
 
+        neural_score = feature_scores.get("neural")
+        if neural_score is not None:
+            if neural_score >= 0.75:
+                explanations.append(
+                    "the semantic context strongly matches this candidate profile"
+                )
+            elif neural_score >= 0.6:
+                explanations.append(
+                    "the semantic context moderately matches this candidate profile"
+                )
+            else:
+                explanations.append(
+                    "the semantic context provides limited support for this candidate"
+                )
+
         return self._format_explanation(explanations)
 
     def _explain_location_score(
@@ -282,6 +297,21 @@ class ScoreExplainer:
                 explanations.append("it has historical approximation links in VRTI")
             else:
                 explanations.append("it has no historical approximation link")
+
+        neural_score = feature_scores.get("neural")
+        if neural_score is not None:
+            if neural_score >= 0.75:
+                explanations.append(
+                    "its contextual semantic match to the mention is strong"
+                )
+            elif neural_score >= 0.6:
+                explanations.append(
+                    "its contextual semantic match to the mention is moderate"
+                )
+            else:
+                explanations.append(
+                    "its contextual semantic match to the mention is weak"
+                )
 
         return self._format_explanation(explanations)
 
