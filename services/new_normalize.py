@@ -178,7 +178,7 @@ class HistoricalNormalizerV2:
                 seen.add(x)
         return out
 
-    def _gen_candidates(self, lower: str) -> list:
+    def _gen_candidates(self, lower: str, protect_terminal_e: bool = False) -> list:
         cands = [lower]
 
         # Override candidate (data-driven). Not hard-forced here.
@@ -215,10 +215,14 @@ class HistoricalNormalizerV2:
         if "oi" in lower:
             cands.append(lower.replace("oi", "oj"))
 
-        if "y" in lower:
-            cands.append(lower.replace("y", "i"))
+        # terminal -ie -> -y (e.g., Dorothie -> Dorothy)
+        if lower.endswith("ie") and len(lower) > 3:
+            cands.append(lower[:-2] + "y")
 
-        if lower.endswith("es") and len(lower) > 3:
+        if "i" in lower:
+            cands.append(lower.replace("i", "y"))
+
+        if (not protect_terminal_e) and lower.endswith("es") and len(lower) > 3:
             cands.append(lower[:-2] + "s")
 
         # u/v: initial v -> u
@@ -244,7 +248,7 @@ class HistoricalNormalizerV2:
             cands.append(lower[:-4] + "ing")
 
         # terminal -e drop
-        if lower.endswith("e") and len(lower) > 3:
+        if (not protect_terminal_e) and lower.endswith("e") and len(lower) > 3:
             cands.append(lower[:-1])
 
         # collapse repeated vowel at end: bee -> be, hee -> he
@@ -296,7 +300,7 @@ class HistoricalNormalizerV2:
         if w.startswith("v"):
             pen += 0.6
         if w.endswith("e") and len(w) > 3:
-            pen += 0.4
+            pen += 0.2
         return pen
 
     def _is_override_candidate(self, orig_lower: str, cand_lower: str) -> bool:
@@ -309,7 +313,8 @@ class HistoricalNormalizerV2:
         if self.force_overrides and lower in self.historical_override:
             return self.historical_override[lower]
 
-        cands = self._gen_candidates(lower)
+        protect_terminal_e = bool(original) and original[0].isupper()
+        cands = self._gen_candidates(lower, protect_terminal_e=protect_terminal_e)
         # Frequency scoring
         freq_scores: Dict[str, float] = {}
         for c in cands:

@@ -318,7 +318,25 @@ class BertNER(BaseNER):
         all_entities = self.merge_wordpiece_entities(all_ents)
         all_entities = self.drop_contained_spans(all_entities)
         all_entities = self.correct_known_entities(all_entities)
+        all_entities = self._dedupe_exact_entities(all_entities)
         return all_entities
+
+    def _dedupe_exact_entities(self, entities: list[dict]) -> list[dict]:
+        """Drop exact duplicate spans introduced by overlapping chunks."""
+        seen = set()
+        unique = []
+        for ent in entities:
+            key = (
+                int(ent.get("start", -1)),
+                int(ent.get("end", -1)),
+                str(ent.get("label", "")),
+                str(ent.get("text", "")),
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            unique.append(ent)
+        return unique
 
     def _process_pipeline_results(self, results, offset=0):
 

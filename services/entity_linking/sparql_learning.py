@@ -743,11 +743,9 @@ def qp(entity_name: str, era: str):
         person_uris = [row["person"]["value"] for row in results]
     if not person_uris:
         return []
-    # print("Expanding knowledge")
     q3 = VRTIQuery.expand_person_knowledge(person_uris)
     resp_3 = VirtualTreasurySPARQL.query(q3)
     result = enrich_with_entity_cards(resp_3, era)
-    # print("Finished querying person")
     return result
 
 
