@@ -1,7 +1,7 @@
 from typing import List
 import re
 
-from services.entity_linking.sparql_querys import VRTIQuery
+from services.entity_linking.sparql_queries import VRTIQuery
 from services.sparql_client import VirtualTreasurySPARQL
 
 KG_BASE = "https://kg.virtualtreasury.ie/"

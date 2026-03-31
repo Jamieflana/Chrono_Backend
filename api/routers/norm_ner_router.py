@@ -5,7 +5,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, Form, HTTPException, Query, UploadFile, File
 from pydantic import BaseModel
-from services.entity_linking.sparql_learning import query_sparql
+from services.entity_linking.candidate_retrieval import query_sparql
 from services.filter_entities import filter_ner_entities
 from services.ner_engines import BertNER, FlairNER, SpacyNER, StanzaNER
 from services.new_normalize import normalize_v2
@@ -32,9 +32,6 @@ class NERModel(str, Enum):
 
 class DebugRequest(BaseModel):
     text: str
-
-
-# bert_ner = BertNER()
 
 
 def process_ner(visual_text: str, ner_engine: str):
@@ -130,7 +127,7 @@ async def run_file(
         # Plain text file
         try:
             visual_text = content.decode("utf-8")
-            print(f"✓ Loaded plain text file: {file.filename}")
+            print(f"Loaded plain text file: {file.filename}")
         except UnicodeDecodeError:
             raise HTTPException(
                 status_code=400, detail="File must be UTF-8 encoded text"
