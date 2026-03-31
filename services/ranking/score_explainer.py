@@ -83,11 +83,19 @@ class ScoreExplainer:
         if residence_score is None:
             residence_score = self.ranker.get_residence_score(candidate)
         residence_labels = candidate.get("residencesLabels", [])
+        normalized_possible_locations = {
+            self.ranker._normalize_place_text(location)
+            for location in self.possible_locations
+            if location
+        }
 
         if residence_score == 1.0 and residence_labels:
             matching_residence = None
             for res in residence_labels:
-                if res.lower() in self.possible_locations:
+                if (
+                    self.ranker._normalize_place_text(res)
+                    in normalized_possible_locations
+                ):
                     matching_residence = res
                     break
 
@@ -98,22 +106,24 @@ class ScoreExplainer:
                 )
 
         elif residence_score == 0.75:
-            residence_uri = candidate.get("residences", "")
-            if residence_uri and residence_uri in self.location_graph:
-                residence_node = self.location_graph[residence_uri]
-                ancestors = residence_node.get("all_ancestors", [])
+            ancestor_labels = self.ranker.get_residence_ancestor_labels(candidate)
+            matching_ancestor = None
+            for ancestor_label in ancestor_labels:
+                if (
+                    self.ranker._normalize_place_text(ancestor_label)
+                    in normalized_possible_locations
+                ):
+                    matching_ancestor = ancestor_label
+                    break
 
-                for ancestor in ancestors:
-                    ancestor_label = ancestor.get("label", "")
-                    if ancestor_label.lower() in self.possible_locations:
-                        residence_name = (
-                            residence_labels[0] if residence_labels else "a location"
-                        )
-                        explanations.append(
-                            f"they reside in {residence_name}, which has an "
-                            f"ancestor ({ancestor_label}) mentioned in the document"
-                        )
-                        break
+            if matching_ancestor:
+                residence_name = (
+                    residence_labels[0] if residence_labels else "a recorded residence"
+                )
+                explanations.append(
+                    f"they reside in {residence_name}, whose parent geography includes "
+                    f"{matching_ancestor}, which is mentioned in the document"
+                )
 
         elif residence_score == 0.3:
             explanations.append("no residence information is available")

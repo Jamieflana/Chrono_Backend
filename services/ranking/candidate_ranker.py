@@ -433,29 +433,67 @@ class CandidateRanker:
         score = (0.5 * last_ratio) + (0.35 * first_ratio) + (0.15 * full_ratio)
         return round(score, 3)
 
+    def _split_pipe_values(self, value):
+        if not value:
+            return []
+        return [item.strip() for item in str(value).split("|") if item.strip()]
+
+    def _location_label_from_uri(self, uri):
+        node = self.location_graph.get(uri, {})
+        label = node.get("english") or node.get("irish")
+        if label:
+            return str(label)
+
+        parts = uri.rstrip("/").split("/")
+        if len(parts) >= 2:
+            return parts[-2].replace("_", " ")
+        return ""
+
+    def get_residence_ancestor_labels(self, candidate):
+        """Collect ancestor place labels for a candidate's residence URIs."""
+        seen_uris = set()
+        ancestor_labels = []
+        residence_uris = self._split_pipe_values(candidate.get("residences", ""))
+        stack = list(residence_uris)
+
+        while stack:
+            uri = stack.pop()
+            if uri in seen_uris:
+                continue
+            seen_uris.add(uri)
+
+            node = self.location_graph.get(uri, {})
+            for parent_uri in node.get("parents", []) or []:
+                label = self._location_label_from_uri(parent_uri)
+                if label and label not in ancestor_labels:
+                    ancestor_labels.append(label)
+                if parent_uri not in seen_uris:
+                    stack.append(parent_uri)
+
+        return ancestor_labels
+
     def get_residence_score(self, candidate):
         # Start with possible locations, then use the URI's with the Global graph after
         if not self.possible_locations:
             return 0.5  # neutral if the document doesnt mention locations
-        residences = candidate.get("residencesLabels", [])
+        normalized_possible_locations = {
+            self._normalize_place_text(location)
+            for location in self.possible_locations
+            if location
+        }
+        residences = candidate.get("residencesLabels", []) or []
+        residence_uris = self._split_pipe_values(candidate.get("residences", ""))
 
-        if not residences or residences == "":
+        if not residences and not residence_uris:
             return 0.3  # penalty
 
         for residence in residences:
-            if residence.lower() in self.possible_locations:
+            if self._normalize_place_text(residence) in normalized_possible_locations:
                 return 1.0  # direct match
 
-        # Later I want to use the URI for the residence to check if a places parents or children are mentioned
-        residence_uri = candidate.get("residences", "")
-        if residence_uri and residence_uri in self.location_graph:
-            residence_node = self.location_graph[residence_uri]
-            ancestors = residence_node.get("all_ancestors", [])
-
-            for ancestor in ancestors:
-                ancestor_label = ancestor.get("label", "").lower()
-                if ancestor_label in self.possible_locations:
-                    return 0.75  # They reside somewhere to do with a possible location.
+        for ancestor_label in self.get_residence_ancestor_labels(candidate):
+            if self._normalize_place_text(ancestor_label) in normalized_possible_locations:
+                return 0.75  # They reside somewhere to do with a possible location.
         return 0.0
 
     def get_type_score(self, candidate, mention, label):
