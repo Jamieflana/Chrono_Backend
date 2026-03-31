@@ -3,7 +3,6 @@ __pycache__/
 **/__pycache__/
 sandboxes
 trainer
-testing
 resources
 compare_norm.py
 frequency_dictionary_en_82_765.txt
