@@ -1,0 +1,35 @@
+{"doc_id":"document_1.txt","mention":"Jane Armstrong","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Armstrong_Jane_c17/v12pgt5"}
+{"doc_id":"document_1.txt","mention":"Donegal","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/county/Donegal/v14g1sb"}
+{"doc_id":"document_1.txt","mention":"Londonderry","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/townland/Londonderry/v1zc5h6"}
+{"doc_id":"document_1.txt","mention":"George Carew","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Carew_George_c17/v1yh3v3"}
+{"doc_id":"document_1.txt","mention":"Ulster","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/province/Ulster/v1gsn33"}
+{"doc_id":"document_2","mention":"Henry Jones","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv"}
+{"doc_id":"document_2","mention":"Limerick","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr"}
+{"doc_id":"document_2","mention":"Armagh","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/town/Armagh/v1p37sy"}
+{"doc_id":"document_2","mention":"Ulster","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/province/Ulster/v1gsn33"}
+{"doc_id":"document_2","mention":"Limerick","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr"}
+{"doc_id":"document_2","mention":"Munster","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/province/Munster/v1cw1t2"}
+{"doc_id":"document_2","mention":"Armagh","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/town/Armagh/v1p37sy"}
+{"doc_id":"document_2","mention":"Tyrone","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/county/Tyrone/v19rw2v"}
+{"doc_id":"document_2","mention":"Webb","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Webb_George_c17/v1gv83p"}
+{"doc_id":"document_2","mention":"Limerick","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr"}
+{"doc_id":"document_2","mention":"Munster","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/province/Munster/v1cw1t2"}
+{"doc_id":"document_2","mention":"Limerick","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr"}
+{"doc_id":"document_2","mention":"Dublin","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/city/Dublin/v12cw6w"}
+{"doc_id":"document_3","mention":"Ellen Adams","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7","start":0,"end":11}
+{"doc_id":"document_3","mention":"Fermanagh","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/county/Fermanagh/v11fd6s","start":75,"end":85}
+{"doc_id":"document_3","mention":"Rory Maguire","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Maguire_Rory_c17/v1s64wj","start":830,"end":842}
+{"doc_id":"document_3","mention":"Ballyshannon","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/town/Ballyshannon/v12cc6g","start":2203,"end":2214}
+{"doc_id":"document_3","mention":"Ellen Adams","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7","start":2286,"end":2297}
+{"doc_id":"document_3","mention":"Ellen Adams","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7","start":2923,"end":2934}
+{"doc_id":"document_3","mention":"Henry Jones","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv","start":2988,"end":2999}
+{"doc_id":"document_4","mention":"Sarah Allicott","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Allicott_Sarah_c17/v1j82nx","start":0,"end":14}
+{"doc_id":"document_4","mention":"Dublin","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/city/Dublin/v12cw6w","start":60,"end":66}
+{"doc_id":"document_4","mention":"Sarah Allicott","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Allicott_Sarah_c17/v1j82nx","start":672,"end":686}
+{"doc_id":"document_4","mention":"Henry Jones","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv","start":736,"end":747}
+{"doc_id":"document_5","mention":"Jane Collins","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Collins_Jane_c17/v1hp34f","start":0,"end":12}
+{"doc_id":"document_5","mention":"Tipperary","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/county/Tipperary/v1rwq33","start":70,"end":79}
+{"doc_id":"document_5","mention":"John Hackett","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Hackett_John-Baptist_c17/v15x1bw","start":835,"end":847}
+{"doc_id":"document_5","mention":"Jane Collins","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Collins_Jane_c17/v1hp34f","start":1336,"end":1348}
+{"doc_id":"document_6","mention":"Mary Hill","label":"PER","gold_uri":"https://kg.virtualtreasury.ie/person/Hill_Mary_c17/v165mjt","start":0,"end":9}
+{"doc_id":"document_6","mention":"Dublin","label":"LOC","gold_uri":"https://kg.virtualtreasury.ie/place/present-day/county/Dublin/v1s4kv2","start":80,"end":86}

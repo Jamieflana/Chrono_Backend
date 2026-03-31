@@ -1,0 +1,970 @@
+[
+    {
+        "file_name": "0001_NLI_GO_MS_66_0001r",
+        "text": "Rose daughter of Walter Ball of Dublin alderman and maior, and wife to Luke Challoner doctoure of Divinity by whom shee had issue divers children (all deade younge one daughter excepted named Phoebe) deceased of ye plague the sixe and twentieth of October ano 1604 and is bur[ied] in Trinitie colledge Dublin with moste of her issue. ",
+        "ents": [
+            {
+                "text": "Walter Ball",
+                "start": 17,
+                "end": 28,
+                "label": "PER",
+                "entry": 1
+            },
+            {
+                "text": "Phoebe",
+                "start": 192,
+                "end": 198,
+                "label": "PER",
+                "entry": 1
+            },
+            {
+                "text": "Dublin",
+                "start": 32,
+                "end": 38,
+                "label": "LOC",
+                "entry": 1
+            },
+            {
+                "text": "Rose",
+                "start": 0,
+                "end": 4,
+                "label": "PER",
+                "entry": 1
+            },
+            {
+                "text": "Luke Challoner",
+                "start": 71,
+                "end": 85,
+                "label": "PER",
+                "entry": 1
+            }
+        ]
+    },
+    {
+        "file_name": "0001_NLI_GO_MS_66_0001r",
+        "text": "Mary daughter of James Rian sometime Shreve of Dublin and wife to Richard Noble gentleman, deceased at Thristledermotte in December the yeere of grace 1604. And is bur[ied] in Dublin. ",
+        "ents": [
+            {
+                "text": "James Rian",
+                "start": 17,
+                "end": 27,
+                "label": "PER",
+                "entry": 2
+            },
+            {
+                "text": "Dublin",
+                "start": 176,
+                "end": 182,
+                "label": "LOC",
+                "entry": 2
+            },
+            {
+                "text": "Richard Noble",
+                "start": 66,
+                "end": 79,
+                "label": "PER",
+                "entry": 2
+            },
+            {
+                "text": "Mary",
+                "start": 0,
+                "end": 4,
+                "label": "PER",
+                "entry": 2
+            },
+            {
+                "text": "Shreve",
+                "start": 37,
+                "end": 43,
+                "label": "PER",
+                "entry": 2
+            },
+            {
+                "text": "Thristledermotte",
+                "start": 103,
+                "end": 119,
+                "label": "LOC",
+                "entry": 2
+            }
+        ]
+    },
+    {
+        "file_name": "0002_NLI_GO_MS_66_0001v",
+        "text": "Mary Lady Tyrell, d[aughte]r of Walter Segrave alderman maior of Dublin, & wi[fe] to Sr John Tyrell knight ald[erman] and maior or ye same cittie: deceased in December 1604 and is bur[ied] in St Audoens churche. Shee had issue Walter, Mathew, Richarde, Edward, Cicilie (wife to Nichas Stevens sometime shireve of Dublin) Marg[are]t and three more deade in theire infancie. ",
+        "ents": [
+            {
+                "text": "Edward",
+                "start": 253,
+                "end": 259,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "Walter",
+                "start": 227,
+                "end": 233,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "Dublin",
+                "start": 313,
+                "end": 319,
+                "label": "LOC",
+                "entry": 3
+            },
+            {
+                "text": "Nichas Stevens",
+                "start": 278,
+                "end": 292,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "Mary Lady Tyrell",
+                "start": 0,
+                "end": 16,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "Walter Segrave",
+                "start": 32,
+                "end": 46,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "Mathew",
+                "start": 235,
+                "end": 241,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "John Tyrell",
+                "start": 88,
+                "end": 99,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "Cicilie",
+                "start": 261,
+                "end": 268,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "Shee",
+                "start": 212,
+                "end": 216,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "Richarde",
+                "start": 243,
+                "end": 251,
+                "label": "PER",
+                "entry": 3
+            },
+            {
+                "text": "St Audoens",
+                "start": 192,
+                "end": 202,
+                "label": "LOC",
+                "entry": 3
+            }
+        ]
+    },
+    {
+        "file_name": "0002_NLI_GO_MS_66_0001v",
+        "text": "Martin Blake of Athboy leaned in the lawes was bur[ied] in ye church of Athboy the thirde of March, 1604 he had to wife Elizabeth daughter of Michaell Fitz Fitz-williams of Donamor, second sonne of Richard of Merion.",
+        "ents": [
+            {
+                "text": "Martin Blake",
+                "start": 0,
+                "end": 12,
+                "label": "PER",
+                "entry": 4
+            },
+            {
+                "text": "Richard",
+                "start": 198,
+                "end": 205,
+                "label": "PER",
+                "entry": 4
+            },
+            {
+                "text": "Elizabeth",
+                "start": 120,
+                "end": 129,
+                "label": "PER",
+                "entry": 4
+            },
+            {
+                "text": "Merion",
+                "start": 209,
+                "end": 215,
+                "label": "LOC",
+                "entry": 4
+            },
+            {
+                "text": "Athboy",
+                "start": 72,
+                "end": 78,
+                "label": "LOC",
+                "entry": 4
+            },
+            {
+                "text": "Michaell Fitz Fitz",
+                "start": 142,
+                "end": 160,
+                "label": "PER",
+                "entry": 4
+            },
+            {
+                "text": "Donamor",
+                "start": 173,
+                "end": 180,
+                "label": "LOC",
+                "entry": 4
+            }
+        ]
+    },
+    {
+        "file_name": "0003_NLI_GO_MS_66_0002r",
+        "text": "Peter Bolton provoste marshall of Leinster deceased ye fourth of March 1604, of a wounde w[hi]ch some dayes before he receaved in ye streetes of Dublin.",
+        "ents": [
+            {
+                "text": "Peter Bolton",
+                "start": 0,
+                "end": 12,
+                "label": "PER",
+                "entry": 5
+            },
+            {
+                "text": "Dublin",
+                "start": 145,
+                "end": 151,
+                "label": "LOC",
+                "entry": 5
+            },
+            {
+                "text": "Leinster",
+                "start": 34,
+                "end": 42,
+                "label": "LOC",
+                "entry": 5
+            }
+        ]
+    },
+    {
+        "file_name": "0003_NLI_GO_MS_66_0002r",
+        "text": "Adam Loftus Lo[rd] Archb[ishop] of Dublin & Lo[rd] Chauncelour and thrice Lo[rd] Justice of Irelande had to wife Jane da[ughte]r of James Pourdon gent. by whome he had issue Sr Dudley Lo[f]t[us] Sr Edward Lo[f]t[us] capt[ain] Adame Lo[ftus] Sr Thomas Loftus knight and henry Loftus, beside many other sonnes dead younge: Marg[are]t wife to Sr George Colley knight, Isabel",
+        "ents": [
+            {
+                "text": "Thomas Loftus",
+                "start": 244,
+                "end": 257,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Dudley",
+                "start": 177,
+                "end": 183,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Isabel",
+                "start": 365,
+                "end": 371,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Jane",
+                "start": 113,
+                "end": 117,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "James Pourdon",
+                "start": 132,
+                "end": 145,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Edward Lo",
+                "start": 198,
+                "end": 207,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "George Colley",
+                "start": 343,
+                "end": 356,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Dublin",
+                "start": 35,
+                "end": 41,
+                "label": "LOC",
+                "entry": 6
+            },
+            {
+                "text": "Adam",
+                "start": 226,
+                "end": 230,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Dudley Lo",
+                "start": 177,
+                "end": 186,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Thomas Loft",
+                "start": 244,
+                "end": 255,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Adam Loftus",
+                "start": 0,
+                "end": 11,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Ireland",
+                "start": 92,
+                "end": 99,
+                "label": "LOC",
+                "entry": 6
+            },
+            {
+                "text": "Adam Loftus Lo",
+                "start": 0,
+                "end": 14,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "##ry Loft",
+                "start": 272,
+                "end": 279,
+                "label": "PER",
+                "entry": 6
+            },
+            {
+                "text": "Irelande",
+                "start": 92,
+                "end": 100,
+                "label": "LOC",
+                "entry": 6
+            }
+        ]
+    },
+    {
+        "file_name": "0004_NLI_GO_MS_66_0002v",
+        "text": "Isabell to Sr William Ussher knight, Ales to Sr henry Werren knight, Martha to Sr Thomas Colclough knight Anne firste to capt[ain]  henry Colley 2 to capt George Blounte and 3. To Sr Edward Blaney knight, Jane to Sr Francis Berkley knight and Dorothie to Sr John More knight. The Lo[rd] Chauncelour deceased at St Sepulchere ye fifte of Aprill 1605 ye 72 yeere of his age ye 24 yeere of his Chauncelourship and of his consecracon, and is buried in St Paterickes Dublin.",
+        "ents": [
+            {
+                "text": "Dublin",
+                "start": 462,
+                "end": 468,
+                "label": "LOC",
+                "entry": 7
+            },
+            {
+                "text": "John More",
+                "start": 258,
+                "end": 267,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "Jane",
+                "start": 205,
+                "end": 209,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "Martha",
+                "start": 69,
+                "end": 75,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "Edward Blaney",
+                "start": 183,
+                "end": 196,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "William Ussher",
+                "start": 14,
+                "end": 28,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "St Sep",
+                "start": 311,
+                "end": 317,
+                "label": "LOC",
+                "entry": 7
+            },
+            {
+                "text": "Thomas Colclough",
+                "start": 82,
+                "end": 98,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "Anne",
+                "start": 106,
+                "end": 110,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "St Paterickes",
+                "start": 448,
+                "end": 461,
+                "label": "LOC",
+                "entry": 7
+            },
+            {
+                "text": "George Blounte",
+                "start": 155,
+                "end": 169,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "Francis Berkley",
+                "start": 216,
+                "end": 231,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "St Paterick",
+                "start": 448,
+                "end": 459,
+                "label": "LOC",
+                "entry": 7
+            },
+            {
+                "text": "Dorothie",
+                "start": 243,
+                "end": 251,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "##ry Werren",
+                "start": 51,
+                "end": 60,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "Ales",
+                "start": 37,
+                "end": 41,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "##ry Colley",
+                "start": 135,
+                "end": 144,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "Colley",
+                "start": 138,
+                "end": 144,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "Isabell",
+                "start": 0,
+                "end": 7,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "##cher",
+                "start": 319,
+                "end": 323,
+                "label": "LOC",
+                "entry": 7
+            },
+            {
+                "text": "Werren",
+                "start": 54,
+                "end": 60,
+                "label": "PER",
+                "entry": 7
+            },
+            {
+                "text": "he",
+                "start": 48,
+                "end": 50,
+                "label": "PER",
+                "entry": 7
+            }
+        ]
+    },
+    {
+        "file_name": "0004_NLI_GO_MS_66_0002v",
+        "text": "Winifrid d[aughte]r of Antonie Toto of Florentin of K[ing] h[enry] viii privie chamber and his serieant painter and wife to Sr Charles Calthorpe knight sometime attorney generall and now one of ye Justices of ye com[m]on pleas deceased ye firste of Auguste 1605. She lefte noe issue by Sr Charles. ",
+        "ents": [
+            {
+                "text": "Charles Calthorpe",
+                "start": 127,
+                "end": 144,
+                "label": "PER",
+                "entry": 8
+            },
+            {
+                "text": "Charles",
+                "start": 289,
+                "end": 296,
+                "label": "PER",
+                "entry": 8
+            },
+            {
+                "text": "Antonie Toto",
+                "start": 23,
+                "end": 35,
+                "label": "PER",
+                "entry": 8
+            },
+            {
+                "text": "K",
+                "start": 52,
+                "end": 53,
+                "label": "LOC",
+                "entry": 8
+            },
+            {
+                "text": "Florentin",
+                "start": 39,
+                "end": 48,
+                "label": "PER",
+                "entry": 8
+            },
+            {
+                "text": "Winifrid",
+                "start": 0,
+                "end": 8,
+                "label": "PER",
+                "entry": 8
+            }
+        ]
+    },
+    {
+        "file_name": "0005_NLI_GO_MS_66_0003r",
+        "text": "William Fitz Williams of Jobston deceased of ye plague at Merion ye xxiiith of Aug[ust] 1605 he did a few weekes before marrry Jennet dr of Gerald Birne of Ballyhorsee and had no issue, he is bur[ied] in ye church of Talaugh. ",
+        "ents": [
+            {
+                "text": "Gerald Birne",
+                "start": 140,
+                "end": 152,
+                "label": "PER",
+                "entry": 9
+            },
+            {
+                "text": "William Fitz Williams",
+                "start": 0,
+                "end": 21,
+                "label": "PER",
+                "entry": 9
+            },
+            {
+                "text": "Merion",
+                "start": 58,
+                "end": 64,
+                "label": "LOC",
+                "entry": 9
+            },
+            {
+                "text": "Jobston",
+                "start": 25,
+                "end": 32,
+                "label": "LOC",
+                "entry": 9
+            },
+            {
+                "text": "Ballyhorsee",
+                "start": 156,
+                "end": 167,
+                "label": "LOC",
+                "entry": 9
+            },
+            {
+                "text": "Talaugh",
+                "start": 217,
+                "end": 224,
+                "label": "LOC",
+                "entry": 9
+            },
+            {
+                "text": "Ballyhorse",
+                "start": 156,
+                "end": 166,
+                "label": "LOC",
+                "entry": 9
+            }
+        ]
+    },
+    {
+        "file_name": "0005_NLI_GO_MS_66_0003r",
+        "text": "Sr George Bourchier knight master of ye Ordinance and of ye privie councell of Ireland, & sonne to Jo[hn] Erle of Bath had to wife Martha sister of Charles howard E[rle] of Noting[ham] & by whome he lefte issue Thom[a]s John and henry. He deceased ye xxiii Septemb[er] 1605 and is bur[ied] in Christechurch Dublin. ",
+        "ents": [
+            {
+                "text": "Ireland",
+                "start": 79,
+                "end": 86,
+                "label": "LOC",
+                "entry": 10
+            },
+            {
+                "text": "Dublin",
+                "start": 307,
+                "end": 313,
+                "label": "LOC",
+                "entry": 10
+            },
+            {
+                "text": "Martha",
+                "start": 131,
+                "end": 137,
+                "label": "PER",
+                "entry": 10
+            },
+            {
+                "text": "George Bourchier",
+                "start": 3,
+                "end": 19,
+                "label": "PER",
+                "entry": 10
+            },
+            {
+                "text": "Charles",
+                "start": 148,
+                "end": 155,
+                "label": "PER",
+                "entry": 10
+            },
+            {
+                "text": "Jo",
+                "start": 99,
+                "end": 101,
+                "label": "PER",
+                "entry": 10
+            },
+            {
+                "text": "John",
+                "start": 220,
+                "end": 224,
+                "label": "PER",
+                "entry": 10
+            },
+            {
+                "text": "Bath",
+                "start": 114,
+                "end": 118,
+                "label": "LOC",
+                "entry": 10
+            },
+            {
+                "text": "Christechurch",
+                "start": 293,
+                "end": 306,
+                "label": "LOC",
+                "entry": 10
+            },
+            {
+                "text": "Erle",
+                "start": 106,
+                "end": 110,
+                "label": "PER",
+                "entry": 10
+            },
+            {
+                "text": "Erle of Bath",
+                "start": 106,
+                "end": 118,
+                "label": "PER",
+                "entry": 10
+            }
+        ]
+    },
+    {
+        "file_name": "0006_NLI_GO_MS_66_0003v",
+        "text": "James Taylour shrieve of Dublin deceased ye twentieth of December 1605.",
+        "ents": [
+            {
+                "text": "Dublin",
+                "start": 25,
+                "end": 31,
+                "label": "LOC",
+                "entry": 11
+            },
+            {
+                "text": "James Taylour",
+                "start": 0,
+                "end": 13,
+                "label": "PER",
+                "entry": 11
+            },
+            {
+                "text": "James Taylour shrieve",
+                "start": 0,
+                "end": 21,
+                "label": "PER",
+                "entry": 11
+            }
+        ]
+    },
+    {
+        "file_name": "0006_NLI_GO_MS_66_0003v",
+        "text": "John Barnewall of Brimore had to wi[fe] Eleonor d[aughte]r of Sr James Dowdall L[ord] chiefe Just[ice] of ye kinges bench by whome she had issue James, Richard, Edward, Peter, Paterick, Robart & Andrew: Marg[are]t wi[fe] to Edw[ard] Taafe of Cookeston, Mary to Ja[mes] ffleminge of Derpatrick, Elizab[eth] to Rich[ard] Gernon of Stabanan, Isma, Ales, Katherin, Anne, Brigid, Ursula & Eleonor. He deceased at Brimore ye xvth of Febr[uary] 1605 & is bur[ied] at Balrotherie. ",
+        "ents": [
+            {
+                "text": "John Barnewall",
+                "start": 0,
+                "end": 14,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Peter",
+                "start": 169,
+                "end": 174,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Richard",
+                "start": 152,
+                "end": 159,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Anne",
+                "start": 361,
+                "end": 365,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Andrew",
+                "start": 195,
+                "end": 201,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Ursula",
+                "start": 375,
+                "end": 381,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Edward",
+                "start": 161,
+                "end": 167,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "James",
+                "start": 145,
+                "end": 150,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Mary",
+                "start": 253,
+                "end": 257,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Paterick",
+                "start": 176,
+                "end": 184,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Robart",
+                "start": 186,
+                "end": 192,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Rich",
+                "start": 309,
+                "end": 313,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Eleonor",
+                "start": 384,
+                "end": 391,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Ales",
+                "start": 345,
+                "end": 349,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Katherin",
+                "start": 351,
+                "end": 359,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "James Dowdall",
+                "start": 65,
+                "end": 78,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Gernon",
+                "start": 319,
+                "end": 325,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Isma",
+                "start": 339,
+                "end": 343,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Brigid",
+                "start": 367,
+                "end": 373,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "##rd",
+                "start": 229,
+                "end": 231,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Taafe",
+                "start": 233,
+                "end": 238,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "James Dowdal",
+                "start": 65,
+                "end": 77,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Brimore",
+                "start": 408,
+                "end": 415,
+                "label": "LOC",
+                "entry": 12
+            },
+            {
+                "text": "Balrotherie",
+                "start": 460,
+                "end": 471,
+                "label": "LOC",
+                "entry": 12
+            },
+            {
+                "text": "Cooke",
+                "start": 242,
+                "end": 247,
+                "label": "LOC",
+                "entry": 12
+            },
+            {
+                "text": "Stabanan",
+                "start": 329,
+                "end": 337,
+                "label": "LOC",
+                "entry": 12
+            },
+            {
+                "text": "Derpatrick",
+                "start": 282,
+                "end": 292,
+                "label": "LOC",
+                "entry": 12
+            },
+            {
+                "text": "Elizab",
+                "start": 294,
+                "end": 300,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Edw",
+                "start": 224,
+                "end": 227,
+                "label": "PER",
+                "entry": 12
+            },
+            {
+                "text": "Cookeston",
+                "start": 242,
+                "end": 251,
+                "label": "LOC",
+                "entry": 12
+            }
+        ]
+    }
+]
