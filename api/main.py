@@ -20,8 +20,4 @@ app.add_middleware(
 )
 
 # --- Include Routers ---
-# app.include_router(ner_router.router)
-# app.include_router(normalize_router.router)
-# app.include_router(pipeline_router.router)
-# app.include_router(entity_linking.router)
 app.include_router(norm_ner_router.router)
