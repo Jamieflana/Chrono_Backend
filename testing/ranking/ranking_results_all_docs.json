@@ -1,0 +1,825 @@
+{
+  "summary": {
+    "total_mentions": 48,
+    "retrieval_coverage": 1.0,
+    "accuracy@1": 0.9791666666666666,
+    "mrr": 0.9895833333333334,
+    "recall@1": 0.9791666666666666,
+    "recall@3": 1.0,
+    "recall@5": 1.0
+  },
+  "details": [
+    {
+      "doc_id": "document_1",
+      "mention": "Jane Armstrong",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Armstrong_Jane_c17/v12pgt5",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Armstrong_Jane_c17/v12pgt5",
+        "https://kg.virtualtreasury.ie/person/Armstrong_Jane_c17/v1g74tz",
+        "https://kg.virtualtreasury.ie/person/Armstrong_Margaret_c17/v13n1sg",
+        "https://kg.virtualtreasury.ie/person/Armstrong_Mary_c18/v1vf58w"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_1",
+      "mention": "Donegal",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Donegal/v14g1sb",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Donegal/v14g1sb",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Donegal/v1mjf98",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Donegal/v1d55gk",
+        "https://kg.virtualtreasury.ie/place/present-day/town/Donegal/v16v9qq",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Donegal/v19gx9f"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_1",
+      "mention": "Londonderry",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/townland/Londonderry/v1zc5h6",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Londonderry/v1v2r9j",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Londonderry/v1zc5h6",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/North-West-Liberties-of-Londonderry/v1x6bk6"
+      ],
+      "rr": 0.5,
+      "hit@1": 0,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_1",
+      "mention": "George Carew",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Carew_George_c17/v1yh3v3",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Carew_George_c17/v1yh3v3",
+        "https://kg.virtualtreasury.ie/person/Carew_Thomas_c17/v1z59nq",
+        "https://kg.virtualtreasury.ie/person/Carew_Peter_c16/v1m4nq6"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_1",
+      "mention": "Ulster",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/province/Ulster/v1gsn33",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/province/Ulster/v1gsn33",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Ballyoulster/v1f7rw6"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Henry Jones",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv",
+        "https://kg.virtualtreasury.ie/person/Jones_Arthur_c17/v1q2gw9",
+        "https://kg.virtualtreasury.ie/person/Jones_Roger_c17/v1h2v1q",
+        "https://kg.virtualtreasury.ie/person/Jones_Richard_c18/v151krm",
+        "https://kg.virtualtreasury.ie/person/Jones_Michael_c17/v1cjj33"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Armagh",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/town/Armagh/v1p37sy",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/town/Armagh/v1p37sy",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Armagh/v1s48xf",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Armaghbrague/v1q8db2",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/Armagh/v149jrx",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Armagh-Armagh-portion/v19zym6"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Ulster",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/province/Ulster/v1gsn33",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/province/Ulster/v1gsn33",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Ballyoulster/v1f7rw6"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Limerick",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Limerick/v16smv2",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Limerick/v1tbh57",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Limerick/v19yg5n"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Munster",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/province/Munster/v1cw1t2",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/province/Munster/v1cw1t2"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Armagh",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/town/Armagh/v1p37sy",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/town/Armagh/v1p37sy",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Armagh/v1s48xf",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Armaghbrague/v1q8db2",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/Armagh/v149jrx",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Armagh-Armagh-portion/v19zym6"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Tyrone",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Tyrone/v19rw2v",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Tyrone/v19rw2v",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Tyrone/v1q6qx4",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Artrea-Tyrone-portion/v17vj9j",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Clonfeacle-Tyrone-portion/v1v65xp",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Lisheentyrone-South/v1k76xw"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Limerick",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Limerick/v16smv2",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Limerick/v1tbh57",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Limerick/v19yg5n"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Munster",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/province/Munster/v1cw1t2",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/province/Munster/v1cw1t2"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "doc2",
+      "mention": "Limerick",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/city/Limerick/v1w93cr",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Limerick/v16smv2",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Limerick/v1tbh57",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Limerick/v19yg5n"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_3",
+      "mention": "Ellen Adams",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7",
+        "https://kg.virtualtreasury.ie/person/Adams_Bernard_c17/v1pd96p",
+        "https://kg.virtualtreasury.ie/person/Adams_Margaret_c17/v1c4gy3",
+        "https://kg.virtualtreasury.ie/person/Adams_Mary_c17/v1z1t4t"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_3",
+      "mention": "Fermanagh",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Fermanagh/v11fd6s",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Fermanagh/v11fd6s"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_3",
+      "mention": "Rory Maguire",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Maguire_Rory_c17/v1s64wj",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Maguire_Rory_c17/v1s64wj",
+        "https://kg.virtualtreasury.ie/person/Maguire_Conor_c17/v1m2zq7",
+        "https://kg.virtualtreasury.ie/person/Maguire_Dominic_c18/v13fp1y",
+        "https://kg.virtualtreasury.ie/person/Maguire_C\u00fachonnacht-M\u00f3r_c17/v17pb1v",
+        "https://kg.virtualtreasury.ie/person/Maguire_Elizabeth_c17/v164jvs"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_3",
+      "mention": "Ballyshannon",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/town/Ballyshannon/v12cc6g",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/town/Ballyshannon/v12cc6g",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Ballyshannon/v1kz8b7",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Ballyshannon/v12yn9x",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Ballyshannon/v1gns46",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Ballyshannon/v112xvd"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_3",
+      "mention": "Ellen Adams",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7",
+        "https://kg.virtualtreasury.ie/person/Adams_Bernard_c17/v1pd96p",
+        "https://kg.virtualtreasury.ie/person/Adams_Margaret_c17/v1c4gy3",
+        "https://kg.virtualtreasury.ie/person/Adams_Mary_c17/v1z1t4t"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_3",
+      "mention": "Ellen Adams",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Adams_Ellen_c17/v18cmc7",
+        "https://kg.virtualtreasury.ie/person/Adams_Bernard_c17/v1pd96p",
+        "https://kg.virtualtreasury.ie/person/Adams_Margaret_c17/v1c4gy3",
+        "https://kg.virtualtreasury.ie/person/Adams_Mary_c17/v1z1t4t"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_3",
+      "mention": "Henry Jones",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv",
+        "https://kg.virtualtreasury.ie/person/Jones_Arthur_c17/v1q2gw9",
+        "https://kg.virtualtreasury.ie/person/Jones_Katherine_c17/v1qj95t",
+        "https://kg.virtualtreasury.ie/person/Jones_Roger_c17/v1h2v1q",
+        "https://kg.virtualtreasury.ie/person/Jones_Richard_c18/v151krm"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_4",
+      "mention": "Sarah Allicott",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Allicott_Sarah_c17/v1j82nx",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Allicott_Sarah_c17/v1j82nx"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_4",
+      "mention": "Dublin",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/city/Dublin/v12cw6w",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/city/Dublin/v12cw6w",
+        "https://kg.virtualtreasury.ie/place/present-day/city/Dublin-Borough/v1q2c9r",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/Dublin/v1q4k3m",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Dublin/v1s4kv2",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/City-of-Dublin/v1h3q1r"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_4",
+      "mention": "Sarah Allicott",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Allicott_Sarah_c17/v1j82nx",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Allicott_Sarah_c17/v1j82nx"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_4",
+      "mention": "Henry Jones",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Jones_Henry_c17/v1z66gv",
+        "https://kg.virtualtreasury.ie/person/Jones_Charity_c17/v19drx6",
+        "https://kg.virtualtreasury.ie/person/Jones_Eleanor_c17/v17zm8w",
+        "https://kg.virtualtreasury.ie/person/Jones_Jane_c17/v1bjm33",
+        "https://kg.virtualtreasury.ie/person/Jones_Catherine_c17/v1z41jc"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_5",
+      "mention": "Jane Collins",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Collins_Jane_c17/v1hp34f",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Collins_Jane_c17/v1hp34f",
+        "https://kg.virtualtreasury.ie/person/Collins_Jeane_c17/v16gtz4",
+        "https://kg.virtualtreasury.ie/person/Collins_Jane_C17/v1b2vz8",
+        "https://kg.virtualtreasury.ie/person/Collins_Jane_c17/v1b2vz8",
+        "https://kg.virtualtreasury.ie/person/Collins_Joan_c17/v1m6kj1"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_5",
+      "mention": "Tipperary",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Tipperary/v1rwq33",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Tipperary/v1rwq33",
+        "https://kg.virtualtreasury.ie/place/present-day/town/Tipperary/v15brt8",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Tipperary/v1p3s4z",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Tipperaryhills/v1stp76"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_5",
+      "mention": "John Hackett",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Hackett_John-Baptist_c17/v15x1bw",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Hackett_John-Baptist_c17/v15x1bw",
+        "https://kg.virtualtreasury.ie/person/Hackett_Thomas_c17/v1m4q4g",
+        "https://kg.virtualtreasury.ie/person/Hackett_Thomas_c18/v176hsy",
+        "https://kg.virtualtreasury.ie/person/Hackett_Anna_c17/v1k97yx",
+        "https://kg.virtualtreasury.ie/person/Hackett_Alison_c17/v1nzz22"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_5",
+      "mention": "Jane Collins",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Collins_Jane_c17/v1hp34f",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Collins_Jane_c17/v1hp34f",
+        "https://kg.virtualtreasury.ie/person/Collins_Jeane_c17/v16gtz4",
+        "https://kg.virtualtreasury.ie/person/Collins_Jane_C17/v1b2vz8",
+        "https://kg.virtualtreasury.ie/person/Collins_Jane_c17/v1b2vz8",
+        "https://kg.virtualtreasury.ie/person/Collins_Joan_c17/v1m6kj1"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_6",
+      "mention": "Mary Hill",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Hill_Mary_c17/v165mjt",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Hill_Mary_c17/v165mjt",
+        "https://kg.virtualtreasury.ie/person/Hill_Arthur_c17/v13pv5t",
+        "https://kg.virtualtreasury.ie/person/Hill_Ann_c17/v1f6mx1",
+        "https://kg.virtualtreasury.ie/person/Hill_Rebecca_c17/v1bb81m",
+        "https://kg.virtualtreasury.ie/person/Hill_Elizabeth_c17/v1c77vs"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_6",
+      "mention": "Dublin",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Dublin/v1s4kv2",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Dublin/v1s4kv2",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/Dublin/v1q4k3m",
+        "https://kg.virtualtreasury.ie/place/present-day/city/Dublin/v12cw6w",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/City-of-Dublin/v1h3q1r",
+        "https://kg.virtualtreasury.ie/place/present-day/city/Dublin-Borough/v1q2c9r"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_7",
+      "mention": "Jane Smith",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Smith_Jane_c17/v1dw39j",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Smith_Jane_c17/v1dw39j",
+        "https://kg.virtualtreasury.ie/person/Smith_Ann_c17/v1k14bv",
+        "https://kg.virtualtreasury.ie/person/Smith_Ann_c17/v1q7y2m",
+        "https://kg.virtualtreasury.ie/person/Smith_Erasmus_c17/v1pfj46",
+        "https://kg.virtualtreasury.ie/person/Smith_Grace_c17/v1f7h7w"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_7",
+      "mention": "Cavan",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Cavan/v18xdn2",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Cavan/v18xdn2",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Cavan/v186ktm",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Cavan/v1gj3q8",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Cavan/v1j3ht8",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Cavan/v1wd2q9"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_7",
+      "mention": "Meath",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Meath/v189psd",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Meath/v189psd",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Westmeath/v15tc4h",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Meath-Hill/v1hk6s6",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Moor-of-Meath/v19z4sk",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Barmeath/v1p81tv"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_7",
+      "mention": "Meath",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Meath/v189psd",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Meath/v189psd",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Westmeath/v15tc4h",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Meath-Hill/v1hk6s6",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Moor-of-Meath/v19z4sk",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Barmeath/v1p81tv"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_7",
+      "mention": "William Cadogan",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Cadogan_William_c17/v1n47nb",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Cadogan_William_c17/v1n47nb",
+        "https://kg.virtualtreasury.ie/person/Cadogan_William_c18/v1mz8w6"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_7",
+      "mention": "Jane Smith",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Smith_Jane_c17/v1dw39j",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Smith_Jane_c17/v1dw39j",
+        "https://kg.virtualtreasury.ie/person/Smith_Ann_c17/v1k14bv",
+        "https://kg.virtualtreasury.ie/person/Smith_Ann_c17/v1q7y2m",
+        "https://kg.virtualtreasury.ie/person/Smith_Erasmus_c17/v1pfj46",
+        "https://kg.virtualtreasury.ie/person/Smith_Grace_c17/v1f7h7w"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_8",
+      "mention": "Jane Bingham",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Bingham_Jane_c17/v15hxz3",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Bingham_Jane_c17/v15hxz3",
+        "https://kg.virtualtreasury.ie/person/Bingham_Anne_c17/v1h72wh",
+        "https://kg.virtualtreasury.ie/person/Bingham_George_c16/v19bpr1",
+        "https://kg.virtualtreasury.ie/person/Bingham_Richard_c16/v1wfc89"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_9",
+      "mention": "Anne Bull",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Bull_Anne_c17/v1hn62x",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Bull_Anne_c17/v1hn62x",
+        "https://kg.virtualtreasury.ie/person/Bullingbrook_Anne_c17/v1p48db"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_9",
+      "mention": "Anne Bull",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Bull_Anne_c17/v1hn62x",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Bull_Anne_c17/v1hn62x",
+        "https://kg.virtualtreasury.ie/person/Bullingbrook_Anne_c17/v1p48db"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_9",
+      "mention": "Monaghan",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Monaghan/v19mw9h",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Monaghan/v19mw9h",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Monaghan/v1t9pk6",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Monaghan/v169tkn",
+        "https://kg.virtualtreasury.ie/place/present-day/town/Monaghan/v1wxk23",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Monaghan/v1b5c5z"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_9",
+      "mention": "John Ponson",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Ponsonby_John_c17/v1z5n4x",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Ponsonby_John_c17/v1z5n4x"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_10",
+      "mention": "Alice Clarke",
+      "label": "PER",
+      "gold_uri": "https://kg.virtualtreasury.ie/person/Clarke_Alice_c17/v1q8f8p",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/person/Clarke_Alice_c17/v1q8f8p",
+        "https://kg.virtualtreasury.ie/person/Clarke_Catherine_c17/v119cdc",
+        "https://kg.virtualtreasury.ie/person/Clarke_Alice_c17/v1k4z5w",
+        "https://kg.virtualtreasury.ie/person/Clarke_Mary_c17/v1jw65y",
+        "https://kg.virtualtreasury.ie/person/Clarke_Margaret_c17/v15h3jn"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_10",
+      "mention": "Meath",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Meath/v189psd",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Meath/v189psd",
+        "https://kg.virtualtreasury.ie/place/present-day/county/Westmeath/v15tc4h",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Meath-Hill/v1hk6s6",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Moor-of-Meath/v19z4sk",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Tullaghomeath/v1s85wv"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_10",
+      "mention": "Cavan",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Cavan/v18xdn2",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Cavan/v18xdn2",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Cavan/v186ktm",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Cavan/v1j3ht8",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Cavan/v1sj55h",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Cavan/v12ycr7"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_10",
+      "mention": "Navan",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/town/Navan/v1y3p9h",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/town/Navan/v1y3p9h",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/Navan-Upper/v131cdy",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/Navan-Lower/v1vd6n4",
+        "https://kg.virtualtreasury.ie/place/present-day/parish/Navan/v1gf89s",
+        "https://kg.virtualtreasury.ie/place/present-day/townland/Navan/v11qkw1"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    },
+    {
+      "doc_id": "document_10",
+      "mention": "Dublin",
+      "label": "LOC",
+      "gold_uri": "https://kg.virtualtreasury.ie/place/present-day/county/Dublin/v1s4kv2",
+      "retrieved": 1,
+      "ranked_uris": [
+        "https://kg.virtualtreasury.ie/place/present-day/county/Dublin/v1s4kv2",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/Dublin/v1q4k3m",
+        "https://kg.virtualtreasury.ie/place/present-day/city/Dublin/v12cw6w",
+        "https://kg.virtualtreasury.ie/place/present-day/barony/City-of-Dublin/v1h3q1r",
+        "https://kg.virtualtreasury.ie/place/present-day/city/Dublin-Borough/v1q2c9r"
+      ],
+      "rr": 1.0,
+      "hit@1": 1,
+      "hit@3": 1,
+      "hit@5": 1
+    }
+  ]
+}
