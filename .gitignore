@@ -10,7 +10,8 @@ requirements-backup.txt
 next_steps
 services/playground
 services/ner
-services/text_extraction/
+services/text_extraction/*
+!services/text_extraction/parser.py
 services/ranking/ranker.py
 utility_funcs/logainm_scraper.py
 utility_funcs/mapping.py
